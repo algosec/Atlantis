@@ -1,0 +1,169 @@
+{
+    "$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
+    "version": "1.2",
+    "type": "AdaptiveCard",
+    "summary": "Allure report update",
+    "body": [
+        {
+            "type": "ColumnSet",
+            "columns": [
+                {
+                    "type": "Column",
+                    "items": [
+                        {
+                            "type": "Image",
+                            "url": "https://biercoff.com/content/images/2017/08/allure-logo.png",
+                            "spacing": "ExtraLarge",
+                            "size": "Small",
+                            "width": "45px",
+                            "selectAction": {
+                                "type": "Action.OpenUrl",
+                                "title": "Allure",
+                                "url": "${url}"
+                            }
+                        }
+                    ],
+                    "width": "auto"
+                },
+                {
+                    "type": "Column",
+                    "items": [
+                        {
+                            "type": "TextBlock",
+                            "text": "${title}",
+                            "spacing": "None",
+                            "wrap": true,
+                            "size": "Large",
+                            "weight": "Bolder"
+                        },
+                        {
+                            "type": "RichTextBlock",
+                            "inlines": [
+                                {
+                                    "type": "TextRun",
+                                    "text": "${build}",
+                                    "weight": "Bolder"
+                                },
+                                {
+                                    "type": "TextRun",
+                                    "text": " (${branch.title})",
+                                    "$when": "${branch.title != 'master'}"
+                                }
+                            ]
+                        }
+                    ],
+                    "width": "stretch"
+                }
+            ]
+        },
+        {
+            "$when": "${failed > 0}",
+            "type": "ColumnSet",
+            "columns": [
+                {
+                    "type": "Column",
+                    "width": "auto",
+                    "style": "default",
+                    "items": [
+                        {
+                            "type": "TextBlock",
+                            "text": "Passed:",
+                            "color": "Good"
+                        },
+                        {
+                            "$when": "${skipped > 0}",
+                            "type": "TextBlock",
+                            "text": "Skipped:",
+                            "color": "Warning",
+                            "spacing": "None"
+                        },
+                        {
+                            "type": "TextBlock",
+                            "text": "Failed:",
+                            "color": "Attention",
+                            "spacing": "None"
+                        }
+                    ]
+                },
+                {
+                    "type": "Column",
+                    "width": "stretch",
+                    "items": [
+                        {
+                            "type": "TextBlock",
+                            "text": "${passed}",
+                            "spacing": "Small"
+                        },
+                        {
+                            "$when": "${skipped > 0}",
+                            "type": "TextBlock",
+                            "text": "${skipped}",
+                            "spacing": "None"
+                        },
+                        {
+                            "type": "TextBlock",
+                            "text": "${failed}",
+                            "spacing": "None"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "type": "TextBlock",
+            "text": "All test passed!",
+            "color": "Good",
+            "$when": "${failed == 0}"
+        }
+    ],
+    "actions": [
+        {
+            "$when": "${failed > 0}",
+            "type": "Action.ShowCard",
+            "title": "View Failures",
+            "card": {
+                "type": "AdaptiveCard",
+                "$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
+                "body": [
+                    {
+                        "type": "TextBlock",
+                        "$data": "${failedTests}",
+                        "text": "${$data}"
+                    }
+                ]
+            },
+            "style": "destructive"
+        },
+        {
+            "$when": "${failed > 0}",
+            "type": "Action.OpenUrl",
+            "title": "View Defects",
+            "url": "https://status-automation.algosec.com/channels/${version}/${branch.id}/${targetChannelTitle}"
+        },
+        {
+            "$when": "${failed > 0}",
+            "type": "Action.ShowCard",
+            "title": "Mark Reviewed",
+            "card": {
+                "type": "AdaptiveCard",
+                "$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
+                "body": [
+                    {
+                        "type": "TextBlock",
+                        "text": "To mark card as review, please replay to this message with"
+                    },
+                    {
+                        "type": "TextBlock",
+                        "text": "meaningful comment and mention the **@reviewed** bot.",
+                        "spacing": "None"
+                    },
+                    {
+                        "type": "TextBlock",
+                        "text": "After few seconds you'll get a confirmation or needed action."
+                    }
+                ]
+            },
+            "style": "destructive"
+        }
+    ]
+}

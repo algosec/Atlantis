@@ -1,0 +1,41 @@
+<div *ngIf="currentUser" class="top-bar">
+  <div>
+    <img src="../assets/logo.svg" alt="Atlantis" class="logo">
+    <span class="title">Atlantis</span>
+    <nav class="left-nav hidden-print">
+      <a routerLink="/channels" routerLinkActive="active"><i class="fas fa-th-list"></i> Channels</a>
+      <a routerLink="/dashboards" routerLinkActive="active"><i class="fas fa-poll"></i> Dashboards</a>
+      <a routerLink="/compare-builds" routerLinkActive="active"><i class="fas fa-compress-alt"></i> Compare Builds</a>
+      <a routerLink="/defects" routerLinkActive="active"><i class="fas fa-bug"></i> Defects</a>
+    </nav>
+  </div>
+  <nav class="right-nav hidden-print">
+    <a (click)="exportToPdf()">
+      <span class="icon-sync"><i [ngClass]="isPdfRunning ? 'fas fa-sync-alt fa-spin' : 'far fa-file-pdf'"></i></span>
+      Export PDF
+    </a>
+    <div class="dropdown">
+      <span class="dropdown-button" [title]="currentUser.username">
+        <span class="icon-sync"><i class="fas fa-user"></i></span>
+        {{currentUser.displayName}}
+        <span class="icon-sync"><i class="fas fa-caret-down"></i></span>
+      </span>
+      <nav class="dropdown-nav">
+        <a (click)="authService.logout()">
+          <i class="fas fa-sign-out-alt"></i> Logout
+        </a>
+        <a *ngIf="authService.isAdmin()" routerLink="/admin" routerLinkActive="active">
+          <i class="fas fa-tools"></i> Admin
+        </a>
+        <a (click)="triggerSync()">
+          <span class="icon-sync"><i [ngClass]="isJiraSyncRunning ? 'fas fa-sync-alt fa-spin' : 'fab fa-jira'"></i></span>
+          JIRA Sync
+        </a>
+      </nav>
+    </div>
+  </nav>
+</div>
+
+<div class="page-content">
+  <router-outlet></router-outlet>
+</div>

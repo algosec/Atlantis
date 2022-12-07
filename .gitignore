@@ -1,0 +1,14 @@
+.idea/
+
+.terraform/
+terraform.tfstate*
+
+node_modules/
+
+**/dist/
+
+db-*/
+
+cert/
+
+.env-*.env

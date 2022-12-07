@@ -1,0 +1,27 @@
+th.title, td.title {
+    min-width: 250px;
+}
+td.title {
+    cursor: pointer;
+}
+th.owner, td.owner {
+    width: 250px;
+}
+th.identifiers, td.identifiers {
+    min-width: 300px;
+}
+th.last-activity, td.last-activity {
+    width: 125px;
+}
+th.cards-count, td.cards-count {
+    width: 100px;
+}
+
+.form-top {
+    margin-top: 25px;
+    margin-bottom: 15px;
+}
+
+tr.selected {
+    background-color: #40AFE280;
+}

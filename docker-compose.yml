@@ -1,0 +1,156 @@
+version: "3.7"
+services:
+
+  ms-catalog:
+    build:
+      context: .
+      target: ms-catalog
+    environment:
+      DB_HOST: ${DB_HOST}
+      DB_PORT: ${DB_PORT}
+      DB_PASS: ${DB_PASS}
+      REDIS_HOST: ${REDIS_HOST}
+      REDIS_PORT: ${REDIS_PORT}
+      LOG_LEVEL: ${LOG_LEVEL}
+      DISABLE_CACHE: ${DISABLE_CACHE}
+      MS_AUTH_URL: "http://ms-auth:3001"
+      MS_SETTINGS_URL: "http://ms-settings:3002"
+      WEB_BASE_URL: ${WEB_BASE_URL}
+    restart: always
+    depends_on:
+      - db
+      - flyway-ms-catalog
+      - redis
+    links:
+      - ms-auth
+      - ms-settings
+
+  ms-auth:
+    build:
+      context: .
+      target: ms-auth
+    environment:
+      DB_HOST: ${DB_HOST}
+      DB_PORT: ${DB_PORT}
+      DB_PASS: ${DB_PASS}
+      REDIS_HOST: ${REDIS_HOST}
+      REDIS_PORT: ${REDIS_PORT}
+      LOG_LEVEL: ${LOG_LEVEL}
+      JWT_PRIVATE_KEY_FILE: /etc/cert/jwt/jwt.key
+      JWT_PUBLIC_KEY_FILE: /etc/cert/jwt/jwt.crt
+      WEB_BASE_URL: ${WEB_BASE_URL}
+      MS_SETTINGS_URL: "http://ms-settings:3002"
+    restart: always
+    volumes:
+      - ./cert/jwt/jwt.key:/etc/cert/jwt/jwt.key:ro
+      - ./cert/jwt/jwt.crt:/etc/cert/jwt/jwt.crt:ro
+    depends_on:
+      - db
+      - redis
+      - flyway-ms-auth
+    links:
+      - ms-settings
+
+  ms-settings:
+    build:
+      context: .
+      target: ms-settings
+    environment:
+      DB_HOST: ${DB_HOST}
+      DB_PORT: ${DB_PORT}
+      DB_PASS: ${DB_PASS}
+      REDIS_HOST: ${REDIS_HOST}
+      REDIS_PORT: ${REDIS_PORT}
+      LOG_LEVEL: ${LOG_LEVEL}
+    restart: always
+    depends_on:
+      - db
+      - redis
+      - flyway-ms-settings
+
+  nginx:
+    build:
+      context: .
+      target: nginx
+    restart: always
+    volumes:
+      - ./cert/nginx:/etc/nginx/cert:ro
+    ports:
+      - ${PORT_EXPOSE_NGINX_HTTP}:80
+      - ${PORT_EXPOSE_NGINX_HTTPS}:443
+    links:
+      - ms-auth
+      - ms-catalog
+
+  db:
+    image: mysql:8.0
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_ADMIN_PASS}
+    ports:
+      - ${PORT_EXPOSE_MYSQL}:3306
+    volumes:
+      - ${DB_PERSISTENCE_HOST_VOLUME}:/var/lib/mysql
+    cap_add:
+      - SYS_NICE  # CAP_SYS_NICE
+
+  db-provision:
+    build:
+      context: database/
+      target: db-provision
+    environment:
+      USER: ${DB_ADMIN_USER}
+      MYSQL_PWD: ${DB_ADMIN_PASS}
+      MYSQL_HOST: ${DB_HOST}
+      MYSQL_TCP_PORT: ${DB_PORT}
+      MS_DB_PASSWORD: ${DB_PASS}
+    depends_on:
+      - db
+
+  flyway-ms-auth:
+    build:
+      context: database/
+      target: flyway-ms-auth
+    command: migrate
+    environment:
+      FLYWAY_URL: "jdbc:mysql://${DB_HOST}:${DB_PORT}/ms-auth"
+      FLYWAY_USER: "ms-auth"
+      FLYWAY_PASSWORD: ${DB_PASS}
+      FLYWAY_CONNECT_RETRIES: "20"
+      FLYWAY_IGNORE_MISSING_MIGRATIONS: "true"
+    depends_on:
+      - db
+
+  flyway-ms-catalog:
+    build:
+      context: database/
+      target: flyway-ms-catalog
+    command: migrate
+    environment:
+      FLYWAY_URL: "jdbc:mysql://${DB_HOST}:${DB_PORT}/ms-catalog"
+      FLYWAY_USER: "ms-catalog"
+      FLYWAY_PASSWORD: ${DB_PASS}
+      FLYWAY_CONNECT_RETRIES: "20"
+      FLYWAY_IGNORE_MISSING_MIGRATIONS: "true"
+    depends_on:
+      - db
+
+  flyway-ms-settings:
+    build:
+      context: database/
+      target: flyway-ms-settings
+    command: migrate
+    environment:
+      FLYWAY_URL: "jdbc:mysql://${DB_HOST}:${DB_PORT}/ms-settings"
+      FLYWAY_USER: "ms-settings"
+      FLYWAY_PASSWORD: ${DB_PASS}
+      FLYWAY_CONNECT_RETRIES: "20"
+      FLYWAY_IGNORE_MISSING_MIGRATIONS: "true"
+    depends_on:
+      - db
+
+  redis:
+    image: redis:6.0-alpine
+    restart: always
+    ports:
+      - ${PORT_EXPOSE_REDIS}:6379

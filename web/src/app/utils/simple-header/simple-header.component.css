@@ -1,0 +1,8 @@
+.header {
+    display: flex;
+    margin-bottom: 10px;
+}
+
+.header .title {
+    font-size: 1.4em;
+}

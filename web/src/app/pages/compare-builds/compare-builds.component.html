@@ -1,0 +1,84 @@
+<p *ngIf="!teams || !buildsByBranchByTeams || buildsByBranchByTeams.length == 0; else HasData">
+    No builds found
+</p>
+
+<ng-template #HasData>
+    <table class="build-selection">
+        <tr>
+            <th>Baseline:</th>
+            <td><build-selector [buildsByBranchByTeams]="buildsByBranchByTeams" [build]="compare.baseline.build" [teams]="teams" (buildChange)="updateBuild($event.branch, $event.build, 1)"></build-selector></td>
+        </tr>
+        <tr class="hidden-print">
+            <td colspan="2"><a (click)="swapBuilds()" class="pointer"><i class="fas fa-exchange-alt"></i> swap builds</a></td>
+        </tr>
+        <tr>
+            <th>Build:</th>
+            <td><build-selector [buildsByBranchByTeams]="buildsByBranchByTeams" [build]="compare.build" [teams]="teams" (buildChange)="updateBuild($event.branch, $event.build, 2)"></build-selector></td>
+        </tr>
+    </table>
+
+    <div class="main-selection section">
+        <nav>
+            <a class="button" *ngFor="let filter of compareFilter" (click)="updateFilter(filter)" [class.selected]="compare.mode === filter">{{filter}}</a>
+        </nav>
+    </div>
+
+    <table class="hover-row">
+        <tr>
+            <th class="title">Job</th>
+            <th class="status">{{compare.baseline.build}} (baseline)</th>
+            <th class="compare"><i class="fas"></i></th>
+            <th class="status">{{compare.build}}</th>
+            <th class="owner"><i class="fas fa-user"></i> Owner</th>
+            <th class="defects"><i class="fas fa-bug"></i> Defects <sup>last activity</sup></th>
+        </tr>
+
+        <tr *ngFor="let channelTitle of channelsList">
+            <ng-container *ngIf="toShow(channelTitle)">
+                <td class="title overflow-ellipsis">
+                    <div>
+                        <a routerLink="/channels/{{compare.majorVersion}}/{{compare.branch}}/{{channelTitle}}" target="_blank" title="Click to view history">
+                            {{channelTitle}}
+                        </a>
+                    </div>
+                </td>
+                <td *ngIf="build1Cards.get(channelTitle);else N_A" class="status">
+                    <job-build-status [card]="build1Cards.get(channelTitle)"></job-build-status>
+                </td>
+                <ng-template #N_A>
+                    <td class="status">
+                        <div>N/A</div>
+                    </td>
+                </ng-template>
+
+                <td class="compare">
+                    <span *ngIf="!checkEqual(channelTitle)" [ngClass]="calculateTrendClass(channelTitle)" class="lucida-font" title="Displaying the number of tests degraded comparing to baseline">
+                        {{calculateTrend(channelTitle)}}
+                    </span>
+                </td>
+
+                <td *ngIf="build2Cards.get(channelTitle);else N_A" class="status">
+                    <job-build-status [card]="build2Cards.get(channelTitle)"></job-build-status>
+                </td>
+                <td class="owner overflow-ellipsis">
+                    <chat-link [email]="ownerByChannelMap.get(channelTitle)"></chat-link>
+                </td>
+
+                <td class="defects">
+                    <div *ngIf="build2Cards.get(channelTitle)?.channel && defectsByChannels" class="defects">
+                        <attach-defect [channelId]="build2Cards.get(channelTitle).channel" (success)="loadDefects()"></attach-defect>
+                        <div class="defects-list">
+                            <span *ngFor="let defect of defectsByChannels.get(build2Cards.get(channelTitle).channel)" class="defect">
+                                <defect-link [defect]="defect"></defect-link>
+                                <sup [ngClass]="dateTimeService.getDefectLastActivityColorClass(defect)" title="Last activity is from {{dateTimeService.getTimeFull(defect.lastUpdate)}}"> {{dateTimeService.calcDefectLastActivity(defect)}}</sup>
+                            </span>
+                        </div>
+                    </div>
+                </td>
+            </ng-container>
+        </tr>
+        <tr *ngIf="channelsList.length == 0" class="no-hover">
+            <td colspan="4">No results</td>
+        </tr>
+    </table>
+</ng-template>

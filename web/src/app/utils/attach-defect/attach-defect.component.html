@@ -1,0 +1,8 @@
+<form class="box" (submit)="submit()" [class.active]="isActive()" (mouseover)="isHover = true" (mouseleave)="isHover = false">
+    <button type="submit" [class.loading]="isLoading">
+        <i [ngClass]="{'far fa-plus-square': !isLoading, 'fa fa-sync-alt fa-spin': isLoading}"></i>
+    </button>
+    <label class="expand">
+        <input #defectInput name="value" class="input-text" placeholder="link defect to channel..." maxlength="25" autocomplete="off" [(ngModel)]="defectValue" (ngModelChange)="onDefectValueChanged()" (focusin)="isFocused=true" (focusout)="isFocused=false">
+    </label>
+</form>

@@ -1,0 +1,65 @@
+<div *ngIf="version">
+    <simple-header titleText="Branches Configuration ({{version}})" backUrl="../"></simple-header>
+
+    <div class="section">
+        <p>
+            The following list present all branches of <b>{{version}}</b> that was tested.<br>
+            Please consider to archive branches that are not in use.
+        </p>
+        <p>
+            In addition, an owners for branches can be set using the form below.
+        </p>
+    </div>
+
+    <form *ngIf="branches" (ngSubmit)="submit()">
+
+        <div class="form-top">
+            <label>
+                Set the owner of the selected branch to <input type="email" [(ngModel)]="newOwner" name="newOwner" class="input-text" placeholder="email address"><br>
+            </label>
+            <label>
+                Rename selected branch to <input type="text" [(ngModel)]="newTitle" name="newTitle" class="input-text" placeholder="new name"><br>
+            </label>
+            <input type="submit" class="button">
+        </div>
+
+        <table class="hover-row">
+            <tr>
+                <th></th>
+                <th class="title">Title <input type="text" [(ngModel)]="titleFilter" name="titleFilter" class="input-text" placeholder="Filter title"></th>
+                <th class="owner">Owner <input type="text" [(ngModel)]="ownerFilter" name="ownerFilter" class="input-text" placeholder="Filter owner"></th>
+                <th class="identifiers">Identifiers</th>
+                <th class="archived"><label class="input-checkbox"><input type="checkbox" [(ngModel)]="showArchivedOnly" name="missingJenkinsJobs"> Archived</label></th>
+                <th class="last-activity">Last Activity</th>
+                <th class="cards-count">Cards Count</th>
+            </tr>
+            <tr *ngFor="let branch of branches | ConfigureBranchesFilter:titleFilter:ownerFilter:showArchivedOnly" [class.selected]="checkedBranch === branch.id">
+                <td class="selection"><input type="radio" [checked]="checkedBranch === branch.id" (click)="toggleSelection(branch)"></td>
+                <td class="title" (click)="toggleSelection(branch)">{{branch.title}}</td>
+                <td class="owner" [class.skip]="branch.owner === 'Unassigned'">{{branch.owner}}</td>
+                <td class="identifiers">{{branch.identifiers | json}}</td>
+                <td class="archived">
+                    <a href="javascript:void(0)" (click)="toggleArchive(branch)">
+                        <span *ngIf="branch.archived; else Regular">
+                            <i class="fas fa-box-open"></i> Un-archive
+                        </span>
+                        <ng-template #Regular>
+                            <i class="fas fa-archive"></i> Archive
+                        </ng-template>
+                    </a>
+                </td>
+                <td class="last-activity" [ngClass]="dateTimeService.getBranchLastActivityColorClass(branch)">
+                    <span *ngIf="branch.latestCardTime; else NoActivity" [title]="dateTimeService.getTimeFull(branch.latestCardTime)">
+                        {{dateTimeService.getTimeDiff(branch.latestCardTime)}}
+                    </span>
+                    <ng-template #NoActivity>
+                        No activity
+                    </ng-template>
+                </td>
+                <td class="cards-count">{{branch.cardsCount}} cards</td>
+            </tr>
+        </table>
+
+    </form>
+
+</div>

@@ -1,0 +1,56 @@
+{"entities_to_insert":[
+    {
+      "key": "allowToUseReviewedBypass",
+      "tenantId": "<tenant Id, can be generated in https://www.uuidgenerator.net/version4 >",
+      "value": ["<user's email>", "<user's email>"] //list of users who are allowed to use reviewd by pass
+    },
+    {
+      "key": "featureBranches",
+      "tenantId": "<tenant Id>",
+      "value": {
+        "url": "<url for get api req, resulting in feature beanches list. for example: https://efs-ci.algosec.com/devops/fb_mapping>",
+        //credentials for api request
+        "pass": "<password>",
+        "user": "<username>"
+      }
+    },
+    {
+      "key": "jenkins",
+      "tenantId": "<tenant Id>",
+      "value": {
+        "baseUrl": "<jenkins full url, for example: https://automation.jenkins.algosec.com>"
+      }
+      },
+    {
+      "key": "jira",
+      "tenantId": "<tenant Id>",
+      "value": {
+        "jql": "<searching query in jira, example: project not in (\"Firewall Analyzer\", FireFlow, Appliance, BusinessFlow) AND type in (Bug, AutoBug, \"Support Bug\") AND \"Failing Automation\" = Yes ORDER BY Severity",
+        "fields": {
+          "failingAutomationField": "<example: customfield_11007>",
+          "failingTestCaseNameField": "<example: customfield_13908>"
+        },
+        "baseUrl": "<jira base url, example: https://jira.algosec.com>",
+        "maxBulk": <integer with mux bulk, example: 2000>,
+        "credentials": {
+          "password": "<password>",
+          "username": "<username>",
+          "neededFields":
+          // a list of needed fileds in jira, example:
+          [
+            "issuetype", "status", "summary", "versions", "created", "updated", "customfield_11902", "customfield_13908", "assignee", "customfield_13903", "customfield_14104"
+          ]
+      }
+    },
+    {
+      "key": "sso",
+      "tenantId": "<tenant Id>",
+      "value": {
+        "cert": "<certification>",
+        "entryPoint": "<sso entry point url>",
+        "userAttribute": "<user attribute, example: nameID> ",
+        "displayNameAttribute": "<display name attribute, example: http://schemas.microsoft.com/identity/claims/displayname>"
+      }
+    }
+ ]
+}

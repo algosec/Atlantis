@@ -1,0 +1,88 @@
+.section {
+    margin-bottom: 20px;
+}
+
+.section-top {
+    margin-top: 20px;
+}
+
+.build-selection {
+    margin-bottom: 20px;
+}
+
+h2 {
+    margin-top: 0;
+}
+
+.holder {
+    max-width: 1240px;
+    min-width: 1240px;
+    margin: auto;
+}
+
+.summary {
+    display: flex;
+}
+
+.summary .bottom-line {
+    flex: 1;
+    margin-right: 50px;
+}
+
+.summary .general-chart {
+    width: 500px;
+    margin-right: 20px;
+}
+
+.chart-box {
+    display: inline-block;
+    margin-right: 20px;
+    margin-top: 20px;
+    width: 391px;
+}
+
+.box-border {
+    border: 0.5px solid #58595b30;
+}
+
+.bucket-preview {
+    display: flex;
+}
+.bucket-preview .failures-chart {
+    flex: 1;
+}
+
+table.general-table th {
+    vertical-align: top;
+}
+.status-line:not(:first-child) {
+    margin-top: 5px;
+}
+
+th.title, td.title {
+    width: 350px;
+    max-width: 350px; /* this is a must for some reason... */
+}
+th.status, td.status {
+    width: 350px;
+    max-width: 350px; /* this is a must for some reason... */
+}
+
+.results {
+    width: 1220px;
+    margin-right: 20px;
+    margin-bottom: 40px;
+    margin-top: 20px;
+}
+
+canvas{
+    margin: 0 auto;
+}
+
+.style-icon {
+    color: darkblue;
+    font-size: 0.7em;
+    position: relative;
+    top: -3px;
+}
+

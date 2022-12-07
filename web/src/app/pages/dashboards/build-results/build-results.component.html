@@ -1,0 +1,119 @@
+<p *ngIf="!teams || !buildsByBranchByTeams || buildsByBranchByTeams.length == 0; else HasData">
+    No builds found
+</p>
+
+<ng-template #HasData>
+    <div class="section hidden-print">
+        <table class="build-selection">
+            <tr>
+                <th>Build:</th>
+                <td><build-selector [buildsByBranchByTeams]="buildsByBranchByTeams" [build]="buildNumber" [teams]="teams" (buildChange)="updateBuild($event)"></build-selector></td>
+            </tr>
+        </table>
+    </div>
+
+    <div *ngIf="!isLoading" class="holder">
+        <div class="summary">
+
+            <div class="bottom-line">
+                <h2 class="section">General</h2>
+                <table class="general-table">
+                    <tr>
+                        <th>Pass rate:</th>
+                        <td [ngClass]="generalResult.calculatePassRateClass()" class="pass-rate-value">{{generalResult.calculatePassRate()}}%</td>
+                    </tr>
+                    <tr>
+                        <th>Build:</th>
+                        <td>{{buildNumber}}</td>
+                    </tr>
+                    <tr *ngIf="applianceBuild">
+                        <th>Appliance Build:</th>
+                        <td>{{applianceBuild}}</td>
+                    </tr>
+                    <tr>
+                        <th>Status:</th>
+                        <td>
+                            <div class="status-line pass"><i class="fas fa-check"></i> {{passJobs}} passed</div>
+                            <div class="status-line pending-review"><i class="fas fa-hourglass-half"></i> {{pendingJobs}} pending</div>
+                            <div class="status-line same-status"><i class="fas fa-equals"></i> {{sameStatusJobs}} same status</div>
+                            <div class="status-line reviewed"><i class="fas fa-thumbs-up"></i> {{reviewedJobs}} reviewed</div>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="bottom-line">
+                <h2 class="section">Components</h2>
+                <table>
+                    <tr *ngFor="let bucket of availableBuckets">
+                        <th>{{bucket.title}}</th>
+                        <td [ngClass]="results.get(bucket.title).calculatePassRateClass()">
+                            {{results.get(bucket.title).calculatePassRate()}}%
+                        </td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="general-chart box-border">
+                <canvas baseChart
+                        [data]="generalChart.pieChartData"
+                        [labels]="generalChart.pieChartLabels"
+                        [chartType]="generalChart.pieChartType"
+                        [options]="generalChart.pieChartOptions"
+                        [plugins]="generalChart.pieChartPlugins"
+                        [colors]="generalChart.pieChartColors"
+                        [legend]="generalChart.pieChartLegend">
+                </canvas>
+            </div>
+        </div>
+
+        <div>
+            <div *ngFor="let chart of bucketCharts" class="chart-box box-border">
+                <canvas baseChart
+                        [data]="chart.pieChartData"
+                        [labels]="chart.pieChartLabels"
+                        [chartType]="chart.pieChartType"
+                        [options]="chart.pieChartOptions"
+                        [plugins]="chart.pieChartPlugins"
+                        [colors]="chart.pieChartColors"
+                        [legend]="chart.pieChartLegend">
+                </canvas>
+            </div>
+        </div>
+
+        <div>
+            <div *ngFor="let bucket of availableBuckets" class="results">
+                <h2 class="section">{{bucket.title}}</h2>
+                <div class="bucket-preview">
+                    <div>
+                        <table>
+                            <tr *ngFor="let channel of getChannelsByBucket(bucket)">
+                                <td class="title overflow-ellipsis">
+                                    <a routerLink="/channels/{{majorVersion}}/{{branch}}/{{buildCards.get(channel).channelTitle}}" target="_blank" title="Click to view history">
+                                        {{buildCards.get(channel).channelTitle}}
+                                    </a>
+                                    <sup class="style-icon" *ngIf="numberOfRerunsPerChannel.get(buildCards.get(channel).channelTitle) > 1">
+                                        <i class="fas fa-redo" title="{{numberOfRerunsPerChannel.get(buildCards.get(channel).channelTitle)}} reruns on build: {{buildNumber}}"></i>
+                                        {{numberOfRerunsPerChannel.get(buildCards.get(channel).channelTitle)}}
+                                    </sup>
+                                </td>
+                                <td class="status"><job-build-status [card]="buildCards.get(channel)"></job-build-status></td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="failures-chart">
+                        <canvas *ngIf="this.failuresAmountCharts.get(bucket.title)" baseChart
+                                [data]="this.failuresAmountCharts.get(bucket.title).pieChartData"
+                                [labels]="this.failuresAmountCharts.get(bucket.title).pieChartLabels"
+                                [chartType]="this.failuresAmountCharts.get(bucket.title).pieChartType"
+                                [options]="this.failuresAmountCharts.get(bucket.title).pieChartOptions"
+                                [plugins]="this.failuresAmountCharts.get(bucket.title).pieChartPlugins"
+                                [colors]="this.failuresAmountCharts.get(bucket.title).pieChartColors"
+                                [legend]="this.failuresAmountCharts.get(bucket.title).pieChartLegend" [height]="this.failuresAmountCharts.get(bucket.title).height">
+                        </canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</ng-template>

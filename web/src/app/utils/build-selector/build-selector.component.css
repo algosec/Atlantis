@@ -1,0 +1,30 @@
+.box,
+.checkbox {
+    border: 2px solid;
+    padding: 1px 5px;
+    border-radius: 4px;
+    display : inline-flex;
+    align-items : center;
+    justify-content: center;
+    user-select: none;
+}
+
+.box {
+    height: 26px;
+    color: #40afe2;
+    border-color: #40afe2;
+}
+
+.team-select {
+    width: 200px;
+    margin-right: 10px;
+}
+
+.branch-select {
+    width: 200px;
+    margin-right: 10px;
+}
+
+.build-select {
+    width: 135px;
+}

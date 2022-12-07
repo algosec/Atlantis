@@ -1,0 +1,36 @@
+.holder {
+    display: flex;
+}
+
+.holder .time {
+    width: 135px;
+}
+.holder .box-info {
+    width: 160px;
+}
+.holder .box-trend {
+    width: 20px;
+    margin-top: 3px;
+}
+.holder .box-percentage {
+    width: 60px;
+    text-align: left;
+    margin-top: 5px;
+}
+.holder .external-link {
+    width: 27px;
+}
+.holder .box-status {
+    width: 122px;
+}
+
+.bypass-icon {
+    color: red;
+    font-size: 0.5em;
+    position: relative;
+    top: -10px;
+}
+
+.last-reviewed {
+    font-size: 0.75em;
+}

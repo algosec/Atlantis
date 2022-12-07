@@ -1,0 +1,11 @@
+<select [(ngModel)]="selectedTeam" (change)="updateTeamAndBranch();" class="box team-select">
+    <option *ngFor="let team of buildsByBranchByTeams" [value]="team.id">{{team.version}}</option>
+</select>
+
+<select [(ngModel)]="selectedBranch" (change)="updateBranch();" class="box branch-select">
+    <option *ngFor="let branch of branchesList" [value]="branch.id">{{branch.title}}</option>
+</select>
+
+<select [(ngModel)]="build" (ngModelChange)="update()" class="box build-select">
+    <option *ngFor="let build of buildsList" [value]="build">{{build}}</option>
+</select>

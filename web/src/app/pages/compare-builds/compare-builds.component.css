@@ -1,0 +1,134 @@
+.section {
+    margin-bottom: 20px;
+}
+.build-selection {
+    margin-bottom: 20px;
+    user-select: none;
+}
+.main-selection {
+    flex: 1;
+    font-weight: bold;
+    user-select: none;
+}
+.main-selection > *:not(:first-child) {
+    margin-left: 15px;
+}
+
+.filter-bar {
+    margin-bottom: 15px;
+}
+.filter-row {
+    display: flex;
+}
+.filter-row:not(:last-child) {
+    margin-bottom: 10px;
+}
+.filter-row > *:not(:first-child) {
+    margin-left: 10px;
+}
+.filter-row.search {
+    width: 745px;
+}
+
+.defect {
+    white-space: nowrap;
+}
+
+.defect:not(:last-child) {
+    margin-right: 10px;
+}
+
+th.title, td.title {
+    width: 350px;
+    max-width: 350px; /* this is a must for some reason... */
+}
+
+th.owner, td.owner {
+    width: 170px;
+    max-width: 170px; /* this is a must for some reason... */
+}
+
+th.compare, td.compare {
+    width: 120px;
+    max-width: 120px; /* this is a must for some reason... */
+    text-align: center;
+}
+
+th.status, td.status {
+    width: 245px;
+    max-width: 245px; /* this is a must for some reason... */
+}
+
+th.defects, td.defects {
+    margin-left: 25px;
+}
+
+.box,
+.checkbox {
+    border: 2px solid;
+    padding: 1px 5px;
+    border-radius: 4px;
+    display : inline-flex;
+    align-items : center;
+    justify-content: center;
+    user-select: none;
+}
+
+.box {
+    height: 26px;
+    color: #40afe2;
+    border-color: #40afe2;
+}
+
+.box.bucket {
+    width: 132px;
+}
+
+.checkbox {
+    cursor: pointer;
+}
+
+.checkbox i {
+    margin-right: 5px;
+}
+
+.unchecked {
+    opacity: 0.4;
+}
+
+.unchecked:hover {
+    opacity: 1;
+}
+
+.checkbox input {
+    display: none;
+}
+
+select, select option {
+    font-family: monospace;
+}
+
+i.favorite {
+    cursor: pointer;
+}
+
+.count {
+    width: 50px;
+}
+
+nav {
+    margin-bottom: 20px;
+}
+
+.defects {
+    display: flex;
+}
+.defects-list {
+    margin-left: 10px;
+}
+.defect {
+    white-space: nowrap;
+}
+.defect:not(:last-child) {
+    margin-right: 10px;
+}

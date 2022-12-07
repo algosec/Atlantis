@@ -1,0 +1,33 @@
+{
+    "root": true,
+    "parser": "@typescript-eslint/parser",
+    "plugins": [
+        "@typescript-eslint"
+    ],
+    "extends": [
+        "eslint:recommended",
+        "plugin:@typescript-eslint/eslint-recommended",
+        "plugin:@typescript-eslint/recommended",
+        "plugin:import/typescript",
+        "plugin:import/recommended"
+    ],
+    "rules": {
+        "@typescript-eslint/no-unused-vars": ["warn", { "argsIgnorePattern": "^_", "varsIgnorePattern": "^_" }],
+        "no-console": ["error"],
+        "import/no-restricted-paths": ["error", {
+            "zones": [
+                { "target": "./shared/**", "from": "./ms-*/**" },
+                { "target": "./ms-catalog/**", "from": "./ms-{settings,auth}/**" },
+                { "target": "./ms-auth/**", "from": "./ms-{settings,catalog}/**" },
+                { "target": "./ms-settings/**", "from": "./ms-{catalog,auth}/**" }
+            ]
+        }],
+        "import/named": "off"
+    },
+    "overrides": [{
+        "files": [ "web/**" ],
+        "rules": {
+            "no-console": "off"
+        }
+    }]
+}

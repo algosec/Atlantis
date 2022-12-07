@@ -1,0 +1,21 @@
+<table *ngIf="defects.length > 0; else NoDefects" class="defects expand-last-row full hover-row">
+    <tr>
+        <th>Defect</th>
+        <th>Assignee</th>
+        <th>Created</th>
+        <th>Last Updated</th>
+        <th>Summary</th>
+    </tr>
+    <tr *ngFor="let defect of defects">
+        <td><defect-link [defect]="defect"></defect-link></td>
+        <td><chat-link [email]="defect.assignee"></chat-link></td>
+        <td [title]="dateTimeService.getTimeFull(defect.created)">{{dateTimeService.getTimeDiff(defect.created)}}</td>
+        <td [title]="dateTimeService.getTimeFull(defect.lastUpdate)" [ngClass]="dateTimeService.getDefectLastActivityColorClass(defect)">{{dateTimeService.getTimeDiff(defect.lastUpdate)}}</td>
+        <td>{{defect.summary}}</td>
+    </tr>
+</table>
+<ng-template #NoDefects>
+    <span class="pass">
+        <i class="far fa-grin-beam"></i> No defects!
+    </span>
+</ng-template>

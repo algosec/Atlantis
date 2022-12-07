@@ -1,0 +1,11 @@
+<div class="holder">
+    <div class="cell" [ngClass]="isHidden(this.card.passed)"><i class="fas fa-check"></i> {{this.card.passed}}</div>
+    <div class="cell" [ngClass]="isHidden(this.card.failed)"><i class="fas fa-times"></i> {{this.card.failed}}</div>
+    <div class="cell" [ngClass]="isHidden(this.card.skipped)"><i class="fas fa-fast-forward"></i> {{this.card.skipped}}</div>
+    <div class="percentage lucida-font" [ngClass]="calculatePercentageClass()">
+        {{calculatePercentage()}}%
+    </div>
+    <a href="{{this.card.url}}" target="_blank" title="View Allure Report">
+        <img issueIcon="Allure" alt="" class="allure"/>
+    </a>
+</div>

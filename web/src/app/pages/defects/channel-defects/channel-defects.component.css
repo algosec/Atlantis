@@ -1,0 +1,70 @@
+.section {
+    margin-bottom: 20px;
+}
+.main-selection {
+    flex: 1;
+    font-weight: bold;
+    user-select: none;
+    margin-bottom: 20px;
+    margin-top: 25px;
+}
+.main-selection label:not(:first-child) {
+    margin-left: 15px;
+}
+
+.main-selection .search {
+    display: block;
+    width: 360px;
+    margin-top: 10px;
+}
+
+.box,
+.checkbox {
+    border: 2px solid;
+    padding: 1px 5px;
+    border-radius: 4px;
+    display : inline-flex;
+    align-items : center;
+    justify-content: center;
+    user-select: none;
+}
+
+.box {
+    height: 26px;
+    color: #40afe2;
+    border-color: #40afe2;
+}
+
+select, select option {
+    font-family: monospace;
+}
+
+.channel-separator {
+    color: #40afe2;
+    margin-right: 15px;
+}
+
+td.defect-name {
+    width: 450px;
+    max-width: 450px;
+}
+
+th.th-xs {
+    width: 50px;
+    max-width: 50px;
+}
+
+th.th-sm {
+    width: 100px;
+    max-width: 100px;
+}
+
+th.th-md {
+    width: 200px;
+    max-width: 200px;
+}
+
+th.th-lg {
+    width: 300px;
+    max-width: 300px;
+}

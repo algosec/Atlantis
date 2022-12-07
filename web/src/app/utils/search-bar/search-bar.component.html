@@ -1,0 +1,10 @@
+<label>
+    <span class="search-icon">
+        <i class="fa" [ngClass]="{'fa-search': !isLoading, 'fa-sync-alt fa-spin': isLoading}"></i>
+    </span>
+    <input type="text" [(ngModel)]="search" (ngModelChange)="update()" placeholder="Search..." class="search" search-keyboard-hook />
+    <span class="clear-button" (click)="reset()" title="clear all filters">
+        <i class="fas fa-times"></i>
+    </span>
+    <span *ngIf="!isLoading" class="number-results"><b>{{filteredResults}}</b> out of <b>{{totalResults}}</b></span>
+</label>

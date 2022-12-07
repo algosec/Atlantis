@@ -1,0 +1,13 @@
+<div class="holder">
+    <nav>
+      <a routerLink="/admin/users" routerLinkActive="selected" class="button"><i class="fas fa-users"></i> Users</a>
+      <a routerLink="/admin/api-keys" routerLinkActive="selected" class="button"><i class="fas fa-key"></i> API Keys</a>
+      <a routerLink="/admin/authentication" routerLinkActive="selected" class="button"><i class="fab fa-keycdn"></i> Authentication</a>
+      <a routerLink="/admin/sessions" routerLinkActive="selected" class="button"><i class="fas fa-plug"></i> Active Sessions</a>
+      <a routerLink="/admin/integrations" routerLinkActive="selected" class="button"><i class="fas fa-plug"></i> Integrations</a>
+    </nav>
+
+  <div class="content">
+    <router-outlet></router-outlet>
+  </div>
+</div>

@@ -1,0 +1,4 @@
+<a href="http://{{jiraUrl}}/browse/{{defect.id}}" target="_blank" [title]="calcDefectSummary(defect)">
+    <img [issueIcon]="defect.issueType" class="issue-icon">
+    <span [class.resolved]="isResolvedDefect(defect)">{{defect.id}}</span>
+</a>

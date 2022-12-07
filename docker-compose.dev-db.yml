@@ -1,0 +1,97 @@
+version: "3.7"
+services:
+
+  db:
+    image: mysql:8.0
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: "${DB_ADMIN_PASS:-dev}"
+      TZ: "Asia/Jerusalem"
+    cap_add:
+      - SYS_NICE  # CAP_SYS_NICE
+    volumes:
+      - ${DB_PERSISTENCE_HOST_VOLUME:-./db-dev1}:/var/lib/mysql
+    ports:
+      - ${PORT_EXPOSE_MYSQL:-3306}:3306
+
+
+  db-provision:
+    image: db-provision
+    build:
+      context: database/
+      target: db-provision
+    environment:
+      USER: "${DB_ADMIN_USER:-root}"
+      MYSQL_PWD: "${DB_ADMIN_PASS:-dev}"
+      MYSQL_HOST: "${DB_HOST:-db}"
+      MYSQL_TCP_PORT: "${DB_PORT:-3306}"
+      MS_DB_PASSWORD: "${DB_PASS:-dev}"
+    depends_on:
+      - db
+
+  flyway-ms-auth:
+    image: flyway-ms-auth
+    build:
+      context: database/
+      target: flyway-ms-auth
+    command: migrate
+    environment:
+      FLYWAY_URL: "jdbc:mysql://${DB_HOST:-db}:${DB_POST:-3306}/ms-auth"
+      FLYWAY_USER: "ms-auth"
+      FLYWAY_PASSWORD: "${DB_PASS:-dev}"
+      FLYWAY_CONNECT_RETRIES: "20"
+      FLYWAY_IGNORE_MISSING_MIGRATIONS: "true"
+    depends_on:
+      - db
+
+  flyway-ms-catalog:
+    image: flyway-ms-catalog
+    build:
+      context: database/
+      target: flyway-ms-catalog
+    command: migrate
+    environment:
+      FLYWAY_URL: "jdbc:mysql://${DB_HOST:-db}:${DB_POST:-3306}/ms-catalog"
+      FLYWAY_USER: "ms-catalog"
+      FLYWAY_PASSWORD: "${DB_PASS:-dev}"
+      FLYWAY_CONNECT_RETRIES: "20"
+      FLYWAY_IGNORE_MISSING_MIGRATIONS: "true"
+    depends_on:
+      - db
+
+  flyway-ms-settings:
+    image: flyway-ms-settings
+    build:
+      context: database/
+      target: flyway-ms-settings
+    command: migrate
+    environment:
+      FLYWAY_URL: "jdbc:mysql://${DB_HOST:-db}:${DB_POST:-3306}/ms-settings"
+      FLYWAY_USER: "ms-settings"
+      FLYWAY_PASSWORD: "${DB_PASS:-dev}"
+      FLYWAY_CONNECT_RETRIES: "20"
+      FLYWAY_IGNORE_MISSING_MIGRATIONS: "true"
+    depends_on:
+      - db
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
+    depends_on:
+      - db
+
+  redis:
+    image: redis:6.0
+    restart: always
+    ports:
+      - ${PORT_EXPOSE_REDIS:-6379}:6379
+
+  redis-commander:
+    image: rediscommander/redis-commander:latest
+    restart: always
+    environment:
+      - REDIS_HOST=${REDIS_HOST:-redis}
+    ports:
+      - 8085:8081

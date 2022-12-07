@@ -1,0 +1,52 @@
+<div class="holder">
+
+    <div class="time" [title]="dateTimeService.getTimeFull(card.created)" [ngClass]="showDateColor && dateTimeService.getCardActivityColorClass(card)">
+        <i class="far fa-clock"></i>
+        {{dateTimeService.getTimeDiff(card.created)}}
+    </div>
+
+    <div class="box-info">
+        <a href="{{card.url}}" target="_blank" title="View Allure Report">
+            <img issueIcon="Allure" alt="" class="allure"/>
+        </a>
+        <span [title]="buildCardDescription(card)">
+            {{card.build}}
+        </span>
+        <sup><i *ngIf="cardsUtilsService.isStabilization(card)" class="fas fa-wrench" title="stabilization"></i></sup>
+    </div>
+
+    <i class="box-trend" [title]="calculateTrendTooltip(card)" [ngClass]="calculateTrendClass(card)"></i>
+
+    <div class="box-percentage lucida-font" [title]="calculatePercentageTooltip(card)" [ngClass]="calculatePercentageClass(card)">
+        {{calculatePercentage(card.passed, card.skipped, card.failed)}}%
+    </div>
+
+    <div class="external-link">
+        <a *ngIf="card.webUrl" [href]="card.webUrl" target="_blank" title="Click to view card in Teams">
+            <img issueIcon="Teams" alt="" class="teams">
+        </a>
+    </div>
+
+    <div class="box-status">
+        <span [ngSwitch]="cardsUtilsService.calculateCardStatus(card)" [title]="calculateLinkToCardTitle(card)" [ngClass]="calculateCardClass(card)">
+            <span *ngSwitchCase="CardStatus.PASS">
+                <i class="fas fa-check"></i> Passed
+            </span>
+            <span *ngSwitchCase="CardStatus.REVIEWED">
+                <i class="fas fa-thumbs-up"></i> Reviewed
+            </span>
+            <span *ngSwitchCase="CardStatus.SAME_STATUS">
+                <i class="fas fa-equals"></i> Same Status
+            </span>
+            <span *ngSwitchCase="CardStatus.PENDING">
+                <i class="fas fa-hourglass-half"></i> Pending
+                <sup *ngIf="showLastReviewedIcon && shouldShowLastReviewed(lastReviewed)" [title]="getLastReviewedTitle(lastReviewed)" class="skip last-reviewed">
+                    <i class="fas fa-bell"></i>
+                    {{calculateLastReviewedHint(lastReviewed)}}
+                </sup>
+            </span>
+        </span>
+        <i *ngIf="wasBypassUsed(card)" title="bypass was used to mark reviewed" class="fas fa-asterisk bypass-icon"></i>
+    </div>
+
+</div>

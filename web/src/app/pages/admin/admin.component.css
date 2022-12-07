@@ -1,0 +1,27 @@
+.holder {
+    display: flex;
+    position: relative;
+}
+
+nav {
+    width: 150px;
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    border-right: 0.5px solid #58595b30;
+    height: calc(100vh - 84px);
+    padding-right: 25px;
+}
+
+nav > * {
+    margin-right: 0;
+}
+
+nav > *:not(:first-child) {
+    margin-top: 15px;
+}
+
+.content {
+    flex: 1;
+    margin-left: 200px;
+}

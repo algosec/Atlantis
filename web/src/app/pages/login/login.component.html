@@ -1,0 +1,44 @@
+<div class="holder">
+    <div class="frame">
+
+        <div class="header">
+            <img src="../assets/logoBlue.svg" alt="Atlantis" class="logo">
+            <span class="title">Atlantis</span>
+        </div>
+
+        <div class="content">
+
+            <div *ngIf="tenantId; else LoginForm">
+                <button (click)="proceedWithSso()">
+                    <i class="fas fa-key"></i>
+                    Continue with {{tenantName}} account
+                </button>
+            </div>
+
+            <ng-template #LoginForm>
+                <form>
+                    <label class="form-item">
+                        <i class="icon fas fa-user"></i>
+                        <input name="username" type="text" autocomplete="on" placeholder="Enter your email" [(ngModel)]="username" />
+                    </label>
+
+                    <label class="form-item">
+                        <i class="icon fas fa-key"></i>
+                        <input name="password" type="password" autocomplete="off" placeholder="Enter your password" [(ngModel)]="password" />
+                    </label>
+
+                    <div class="error-placeholder">
+                        <span *ngIf="error">{{error}}</span>
+                    </div>
+
+                    <button (click)="performLogin()">
+                        <i class="fas" [class.fa-unlock]="!isLoading" [class.fa-sync]="isLoading"></i>
+                        Continue
+                    </button>
+
+                </form>
+            </ng-template>
+
+        </div>
+    </div>
+</div>

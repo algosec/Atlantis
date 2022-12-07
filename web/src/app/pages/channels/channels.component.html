@@ -1,0 +1,173 @@
+<p *ngIf="teams.length === 0">
+    No teams found
+</p>
+
+<div *ngIf="selectedTeam">
+
+  <div class="top-box">
+    <div class="holder">
+      <div class="header">
+
+        <div class="main-selection">
+          <label>
+            Version:
+            <select class="box" [ngModel]="selectedTeam.version" (change)="navigateToVersion($event.target.value)">
+              <option *ngFor="let team of teams" [value]="team.version">{{team.version}}</option>
+            </select>
+          </label>
+
+          <label *ngIf="selectedTeam.branches.length > 0">
+            <i class="fas fa-code-branch"></i> {{selectedTeam.mode}} :
+            <select class="box" [ngModel]="selectedBranch && selectedBranch.id" (change)="navigateToBranch($event.target.value)">
+              <option *ngFor="let branch of selectedTeam.branches" [value]="branch.id">{{branch.title}}</option>
+            </select>
+          </label>
+        </div>
+      </div>
+
+      <div *ngIf="selectedBranch">
+        <div class="filter-bar">
+          <div class="filter-row">
+
+            <label class="checkbox favorite" [class.unchecked]="!search.favoritesOnly">
+              <input type="checkbox" [(ngModel)]="search.favoritesOnly" (ngModelChange)="updateSearch()" />
+              <i class="fas fa-star"></i> Favorites
+            </label>
+
+            <label>
+              <select class="box bucket unchecked" [(ngModel)]="search.bucket" (change)="updateSearch()" [class.unchecked]="search.bucket==='All'">
+                <option value="All">All</option>
+                <option disabled>----------------</option>
+                <option *ngFor="let bucket of availableBuckets" [value]="bucket">{{bucket}}</option>
+              </select>
+            </label>
+
+            <label class="checkbox pass" [class.unchecked]="!search.passedOnly">
+              <input type="checkbox" [(ngModel)]="search.passedOnly" (ngModelChange)="search.failuresOnly = search.pendingOnly = search.reviewedOnly = search.sameStatusOnly = false; updateSearch()"/>
+              <i class="fas fa-check"></i> Pass
+            </label>
+
+            <label class="checkbox fail" [class.unchecked]="!search.failuresOnly">
+              <input type="checkbox" [(ngModel)]="search.failuresOnly" (ngModelChange)="search.passedOnly = this.search.pendingOnly = this.search.reviewedOnly = search.sameStatusOnly = false; updateSearch()" />
+              <i class="fas fa-exclamation-circle"></i> Failures
+            </label>
+
+            <label class="checkbox pending-review" [class.unchecked]="!search.pendingOnly">
+              <input type="checkbox" [(ngModel)]="search.pendingOnly" (ngModelChange)="search.passedOnly = search.failuresOnly = search.reviewedOnly = search.sameStatusOnly = false ; updateSearch()" />
+              <i class="fas fa-hourglass-half"></i> Pending
+            </label>
+
+            <label class="checkbox reviewed" [class.unchecked]="!search.reviewedOnly">
+              <input type="checkbox" [(ngModel)]="search.reviewedOnly" (ngModelChange)="search.passedOnly = search.failuresOnly = search.pendingOnly = search.sameStatusOnly = false ; updateSearch()" />
+              <i class="fas fa-thumbs-up"></i> Reviewed
+            </label>
+
+            <label class="checkbox same-status" [class.unchecked]="!search.sameStatusOnly">
+              <input type="checkbox" [(ngModel)]="search.sameStatusOnly" (ngModelChange)="search.passedOnly = search.failuresOnly = search.pendingOnly = search.reviewedOnly = false ; updateSearch()" />
+              <i class="fas fa-equals"></i> Same Status
+            </label>
+
+          </div>
+
+          <search-bar class="filter-row search" [(search)]="search.text" (searchChange)="updateSearch()" (resetChange)="resetSearch()" [totalResults]="channels.length" [filteredResults]="filteredResults.length" [isLoading]="isLoading"></search-bar>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="summary-chart-box" *ngIf="!isLoadingForFirstTime()">
+      <canvas *ngIf="generalChart" baseChart
+              [data]="generalChart.pieChartData"
+              [labels]="generalChart.pieChartLabels"
+              [chartType]="generalChart.pieChartType"
+              [options]="generalChart.pieChartOptions"
+              [plugins]="generalChart.pieChartPlugins"
+              [colors]="generalChart.pieChartColors"
+              [legend]="generalChart.pieChartLegend">
+      </canvas>
+    </div>
+
+    <div class="total-box" *ngIf="!isLoadingForFirstTime()">
+      <div class="status-line pass"><i class="fas fa-check"></i> {{passJobs}} passed</div>
+      <div class="status-line pending-review"><i class="fas fa-hourglass-half"></i> {{pendingJobs}} pending</div>
+      <div class="status-line same-status"><i class="fas fa-equals"></i> {{sameStatusJobs}} same status</div>
+      <div class="status-line reviewed"><i class="fas fa-thumbs-up"></i> {{reviewedJobs}} reviewed</div>
+    </div>
+
+    <div class="management-links hidden-print">
+      <div>
+        <a routerLink="../all/upgrade" class="button">
+          <i class="fas fa-compass"></i> Upgrades
+        </a>
+      </div>
+      <div>
+        <a routerLink="../configure" class="button">
+          <i class="fas fa-cog"></i> Channels
+        </a>
+      </div>
+      <div>
+        <a routerLink="../branches" class="button">
+          <i class="fas fa-code-branch"></i> Branches
+        </a>
+      </div>
+    </div>
+
+  </div>
+
+  <div *ngIf="selectedBranch; else NoSuchBranchError">
+
+    <table class="full hover-row">
+      <tr>
+        <th class="title">Channel</th>
+        <th class="owner"><i class="fas fa-user"></i> Owner</th>
+        <th class="card"><i class="far fa-sticky-note"></i> Latest run (<i class="fas fa-code-branch"></i> {{selectedBranch.title}})</th>
+        <th><i class="fas fa-bug"></i> Defects <sup>last activity</sup></th>
+      </tr>
+
+      <tr *ngFor="let channel of channels | channelFilter:favorites:search.text:search.bucket:search.passedOnly:search.failuresOnly:search.pendingOnly:search.reviewedOnly:search.sameStatusOnly:search.favoritesOnly; trackBy: trackByFn" class="channel">
+        <td class="title overflow-ellipsis">
+          <i class="favorite fa-star hidden-print" (click)="toggleFavorite(channel)" [ngClass]="favoriteClass(channel)" [title]="favoriteTooltip(channel)"></i>
+          <a routerLink="./{{channel.title}}" title="Click to view history">
+            {{channel.title}}
+          </a>
+        </td>
+
+        <td class="owner overflow-ellipsis">
+          <chat-link [email]="channel.owner"></chat-link>
+        </td>
+
+        <td class="card">
+          <card-summary *ngIf="channel.latestCard; else UnknownBlock"
+                        [card]="channel.latestCard"
+                        [showLastReviewedIcon]="true"
+                        [showDateColor]="true"
+                        [lastReviewed]="channel.lastReviewed"></card-summary>
+          <ng-template #UnknownBlock><i class="fas fa-question-circle"></i> Unknown</ng-template>
+        </td>
+
+        <td class="defects">
+          <attach-defect [channelId]="channel.id" (success)="loadChannels()"></attach-defect>
+          <div class="defects-list">
+            <span *ngFor="let defect of channel.defects" class="defect">
+              <defect-link [defect]="defect"></defect-link>
+              <sup [ngClass]="dateTimeService.getDefectLastActivityColorClass(defect)" title="Last activity is from {{dateTimeService.getTimeFull(defect.lastUpdate)}}"> {{dateTimeService.calcDefectLastActivity(defect)}}</sup>
+            </span>
+          </div>
+        </td>
+      </tr>
+
+      <tr *ngIf="filteredResults.length == 0 && !isLoading" class="no-hover">
+        <td colspan="4">No results</td>
+      </tr>
+
+      <tr *ngIf="isLoadingForFirstTime()" class="no-hover">
+        <td colspan="4">Loading...</td>
+      </tr>
+    </table>
+  </div>
+
+  <ng-template #NoSuchBranchError>
+    No such branch <b><i class="fas fa-code-branch"></i> {{requestedBranch}}</b> for version <b>{{selectedTeam.version}}</b>
+  </ng-template>
+
+</div>

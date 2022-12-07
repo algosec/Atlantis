@@ -1,0 +1,27 @@
+<button class="button" (click)="loadData()">
+    <i class="fas fa-sync-alt" [class.fa-spin]="isLoading"></i>
+    refresh
+</button>
+
+<table matSort (matSortChange)="sortData($event)" matSortDisableClear>
+    <tr>
+        <th mat-sort-header="user" class="th-sm"><span><i class="fas fa-user"></i> User</span></th>
+        <th mat-sort-header="last-activity" class="th-sm"><span><i class="far fa-clock"></i> Last Activity</span></th>
+        <th mat-sort-header="created" class="th-sm"><span><i class="far fa-clock"></i> Creation Time</span></th>
+        <th mat-sort-header="ip-address" class="th-sm">IP Address</th>
+        <th mat-sort-header="os" class="th-sm">OS</th>
+        <th mat-sort-header="browser" class="th-sm">Browser</th>
+    </tr>
+    <tr *ngFor="let session of loadActiveSessions">
+        <td title="{{session.user.username}}">{{session.user.displayName}}</td>
+        <td [title]="dateTimeService.getTimeFull(session.lastActivity)">
+            {{dateTimeService.getTimeDiff(session.lastActivity)}}
+        </td>
+        <td [title]="dateTimeService.getTimeFull(session.created)">
+            {{dateTimeService.getTimeDiff(session.created)}}
+        </td>
+        <td>{{session.ipAddress}}</td>
+        <td><i class="fab" [ngClass]="session.os.icon"></i> {{session.os.name}}</td>
+        <td ><i class="fab" [ngClass]="session.browser.icon"></i> {{session.browser.name}}</td>
+    </tr>
+</table>

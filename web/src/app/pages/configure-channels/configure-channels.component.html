@@ -1,0 +1,73 @@
+<div *ngIf="version">
+    <simple-header titleText="Channels Configuration ({{version}})" backUrl="../"></simple-header>
+
+    <div class="section">
+        <p>
+            The following list present all channels of <b>{{version}}</b> ordered by last activity.<br>
+            Please consider to delete channels with no activity (i.e. delete their jenkins job from <a href="http://algo-bitbucket.algosec.com:7990/projects/QAAUT/repos/jenkins-dsl/browse" target="_blank"><i class="fab fa-git-alt"></i>jenkins-dsl</a>)
+        </p>
+        <p>
+            In addition, an owners for channels can be set using the form below.
+        </p>
+    </div>
+
+    <form *ngIf="channels" (ngSubmit)="submit()">
+
+        <div class="form-top">
+            <label>
+                Set the owner of the selected <b>{{getSelectedAndPresentRows()}}</b> channels to <input type="email" [(ngModel)]="newOwner" name="newOwner" class="input-text" placeholder="email address">
+            </label>
+            <input type="submit" class="button">
+        </div>
+
+        <table class="hover-row">
+            <tr>
+                <th class="selection"><input type="checkbox" [checked]="isCheckAllChecked()" (change)="updateCheckAllSelection($event.target.checked)"></th>
+                <th class="title">Channel <input type="text" [(ngModel)]="channelFilter" name="channelFilter" class="input-text" placeholder="Filter channel"></th>
+                <th class="owner">Owner <input type="text" [(ngModel)]="ownerFilter" name="channelOwners" class="input-text" placeholder="Filter owner"></th>
+                <th class="jenkins-job">Jenkins Job</th>
+                <th class="archived"><label class="input-checkbox"><input type="checkbox" [(ngModel)]="showArchivedOnly" name="missingJenkinsJobs"> Archived</label></th>
+                <th class="last-activity">Last Activity</th>
+                <th class="cards-count">Cards Count</th>
+            </tr>
+            <tr *ngFor="let channel of channels | ConfigureChannelsFilter:channelFilter:ownerFilter:showArchivedOnly" [class.selected]="selected.has(channel.id)">
+                <td class="selection"><input type="checkbox" [checked]="selected.has(channel.id)" (change)="updateRowSelection($event.target.checked, channel.id)"></td>
+                <td class="title" (click)="toggleRowSelection(channel.id)">
+                    <a href="{{channel.webUrl}}" target="_blank" title="Open channel in Teams">
+                        <img issueIcon="Teams" alt="" class="teams"/>
+                    </a>
+                    <a routerLink="../all/{{channel.title}}">{{channel.title}}</a>
+                </td>
+                <td  class="owner" [class.skip]="channel.owner === 'Unassigned'">{{channel.owner}}</td>
+                <td class="jenkins-job">
+                    <a *ngIf="channel.jenkinsJob; else NoJenkinsJob" [href]="channel.jenkinsJob" target="_blank">
+                        <i class="fab fa-jenkins"></i> Jenkins Job
+                    </a>
+                    <ng-template #NoJenkinsJob>
+                        <span class="fail">Not exists</span>
+                    </ng-template>
+                </td>
+                <td class="archived">
+                    <a href="javascript:void(0)" (click)="toggleArchive(channel)">
+                        <span *ngIf="channel.archived; else Regular">
+                            <i class="fas fa-box-open"></i> Un-archive
+                        </span>
+                        <ng-template #Regular>
+                            <i class="fas fa-archive"></i> Archive
+                        </ng-template>
+                    </a>
+                </td>
+                <td class="last-activity" [ngClass]="dateTimeService.getChannelLastActivityColorClass(channel)">
+                    <span *ngIf="channel.latestCardTime; else NoActivity" [title]="dateTimeService.getTimeFull(channel.latestCardTime)">
+                        {{dateTimeService.getTimeDiff(channel.latestCardTime)}}
+                    </span>
+                    <ng-template #NoActivity>
+                        No activity
+                    </ng-template>
+                </td>
+                <td class="cards-count">{{channel.cardsCount}} cards</td>
+            </tr>
+        </table>
+
+    </form>
+</div>

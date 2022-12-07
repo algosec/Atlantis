@@ -1,0 +1,52 @@
+<style>
+    h1, h2 {
+        font-weight: normal;
+        margin-top: 0;
+        margin-bottom: 5px;
+    }
+    a {
+        color: #40afe2;
+        text-decoration: none;
+    }
+    .bold {
+        font-weight: bold;
+    }
+    img {
+        text-decoration: none;
+    }
+    .section {
+        margin-bottom: 35px;
+    }
+    .section .content {
+        margin-top: 10px;
+    }
+</style>
+
+<div class="section">
+    <h1 class="header">CI-3 Results for build <span class="bold">{build}</span> of <span class="bold">{branch}</span></h1>
+    <div>
+        <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA8AAAAPCAYAAAA71pVKAAAAs0lEQVQ4T7WTuw3EIAyGzSQMwRgegAIpm1AxSQoKBmAMhqBiAOg5kTsiAiRKpBwN8NufHzwIjCNPtKlEWlVKmZVSRTroJ8Fy71SztvqskmL/wpzzbIxpEwyZtdaLEGL9Oe3wWeS+2uK3QXVuN0Apzd77Wc8VKLZHcAs+gnuwbWU7sN3houzZbf0HvvXIDmUXgjG2OucAEZcQAsQYIaUEZV0HIoK1lgzwRcrh9b0C3+qx/zAfK5lXBTZ1eQUAAAAASUVORK5CYII=" alt="">
+        &nbsp;
+        <a href="{summaryUrl}">View latest summary in Atlantis</a>
+    </div>
+    <div>
+        <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA8AAAAPCAYAAAA71pVKAAAAs0lEQVQ4T7WTuw3EIAyGzSQMwRgegAIpm1AxSQoKBmAMhqBiAOg5kTsiAiRKpBwN8NufHzwIjCNPtKlEWlVKmZVSRTroJ8Fy71SztvqskmL/wpzzbIxpEwyZtdaLEGL9Oe3wWeS+2uK3QXVuN0Apzd77Wc8VKLZHcAs+gnuwbWU7sN3houzZbf0HvvXIDmUXgjG2OucAEZcQAsQYIaUEZV0HIoK1lgzwRcrh9b0C3+qx/zAfK5lXBTZ1eQUAAAAASUVORK5CYII=" alt="">
+        &nbsp;
+        <a href="{buildResultUrl}" class="external-link">View Results in Atlantis</a>
+    </div>
+    <div class="content">
+        <img alt="My Image" src="data:image/png;base64,{summaryPngData}" />
+    </div>
+</div>
+
+<div class="section">
+    <h2>Results trend</h2>
+    <div>
+        <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA8AAAAPCAYAAAA71pVKAAAAs0lEQVQ4T7WTuw3EIAyGzSQMwRgegAIpm1AxSQoKBmAMhqBiAOg5kTsiAiRKpBwN8NufHzwIjCNPtKlEWlVKmZVSRTroJ8Fy71SztvqskmL/wpzzbIxpEwyZtdaLEGL9Oe3wWeS+2uK3QXVuN0Apzd77Wc8VKLZHcAs+gnuwbWU7sN3houzZbf0HvvXIDmUXgjG2OucAEZcQAsQYIaUEZV0HIoK1lgzwRcrh9b0C3+qx/zAfK5lXBTZ1eQUAAAAASUVORK5CYII=" alt="">
+        &nbsp;
+        <a href="{trendUrl}" class="external-link">View in Atlantis</a>
+    </div>
+    <div class="content">
+        <img alt="My Image" src="data:image/png;base64,{branchTrendPngData}" />
+    </div>
+</div>

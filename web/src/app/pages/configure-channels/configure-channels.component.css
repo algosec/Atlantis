@@ -1,0 +1,53 @@
+.header {
+    display: flex;
+    margin-bottom: 10px;
+}
+
+.header .title {
+    font-size: 1.4em;
+}
+
+th {
+    text-align: left;
+}
+
+th, td {
+    padding: 3px 10px;
+}
+
+th:last-child, td:last-child {
+    padding-right: 0;
+}
+
+th:first-child, td:first-child {
+    padding-left: 0;
+}
+
+tr.selected {
+    background-color: #40AFE280;
+}
+
+.form-top {
+    margin-top: 25px;
+    margin-bottom: 15px;
+}
+
+th.selection, td.selection {
+    width: 20px;
+}
+th.title, td.title {
+    width: 450px;
+    cursor: pointer;
+}
+th.owner, td.owner {
+    width: 250px;
+}
+th.jenkins-job, td.jenkins-job {
+    width: 185px;
+}
+th.last-activity, td.last-activity {
+    width: 100px;
+}
+th.cards-count, td.cards-count {
+    width: 100px;
+}

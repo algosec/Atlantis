@@ -1,0 +1,15 @@
+<div *ngIf="defects">
+    <div *ngIf="defects.length > 0 ; else NoOrphenDefectSection;">
+        <p>
+            The following {{defects.length}} defects are marked as <b>FailingAutomation</b> but not assigned to a channel.<br>
+            This list is expected to be empty.
+        </p>
+
+        <defects-table [defects]="defects"></defects-table>
+    </div>
+    <ng-template #NoOrphenDefectSection>
+        <p>
+            There are no orphan defects. Well done!
+        </p>
+    </ng-template>
+</div>

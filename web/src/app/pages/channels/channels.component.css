@@ -1,0 +1,127 @@
+.top-box {
+    display: flex;
+    margin-bottom: 20px;
+}
+
+.holder {
+    flex: 1;
+}
+
+.header {
+    display: flex;
+    margin-bottom: 20px;
+}
+.main-selection {
+    font-weight: bold;
+    user-select: none;
+}
+.main-selection > *:not(:first-child) {
+    margin-left: 15px;
+}
+.management-links :not(:first-child) {
+    margin-top: 15px;
+}
+
+.filter-bar {
+    flex: 1;
+}
+.filter-row {
+    display: flex;
+}
+.filter-row:not(:last-child) {
+    margin-bottom: 10px;
+}
+.filter-row > *:not(:first-child) {
+    margin-left: 10px;
+}
+.filter-row.search {
+    width: 745px;
+}
+
+.defects {
+    display: flex;
+}
+.defects-list {
+    margin-left: 10px;
+}
+.defect {
+    white-space: nowrap;
+}
+.defect:not(:last-child) {
+    margin-right: 10px;
+}
+
+th.title, td.title {
+    width: 350px;
+    max-width: 350px; /* this is a must for some reason... */
+}
+
+th.owner, td.owner {
+    width: 170px;
+    max-width: 170px; /* this is a must for some reason... */
+}
+
+th.card, td.card {
+    width: 490px;
+}
+
+.box,
+.checkbox {
+    border: 2px solid;
+    padding: 1px 5px;
+    border-radius: 4px;
+    display : inline-flex;
+    align-items : center;
+    justify-content: center;
+    user-select: none;
+}
+
+.box {
+    height: 26px;
+    color: #40afe2;
+    border-color: #40afe2;
+}
+
+.box.bucket {
+    width: 132px;
+}
+
+.checkbox {
+    cursor: pointer;
+}
+
+.checkbox i {
+    margin-right: 5px;
+}
+
+.unchecked:not(:hover) {
+    opacity: 0.4;
+}
+
+.checkbox input {
+    display: none;
+}
+
+select, select option {
+    font-family: monospace;
+}
+
+i.favorite {
+    cursor: pointer;
+}
+
+.summary-chart-box {
+    width: 250px;
+    height: 116px;
+    border: 0.5px solid #58595b30;
+    margin-right: 20px;
+}
+
+.total-box {
+    padding: 10px 10px;
+    border: 0.5px solid #58595b30;
+    margin-right: 20px;
+}
+.total-box .status-line:not(:first-child) {
+    margin-top: 5px;
+}

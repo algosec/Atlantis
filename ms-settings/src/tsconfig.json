@@ -1,0 +1,18 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "outDir": "../dist",
+    "types" : ["node", "express"],
+    "allowJs": true,
+    "resolveJsonModule": true,
+    "target": "es6",
+    "module": "commonjs",
+    "lib": [
+      "es2019",
+      "dom"
+    ]
+  },
+  "ts-node": {
+    "transpileOnly": true
+  }
+}

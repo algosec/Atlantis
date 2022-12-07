@@ -1,0 +1,44 @@
+<p *ngIf="!teams || teams.length === 0">
+    No teams found
+</p>
+
+<div *ngIf="selectedTeam">
+
+    <div class="section">
+        <div class="main-selection">
+            <label>
+                Version:
+                <select class="box" [ngModel]="selectedTeam && selectedTeam.version" (change)="navigateToVersion($event.target.value)">
+                    <option *ngFor="let team of teams" [value]="team.version">{{team.version}}</option>
+                </select>
+            </label>
+
+            <label>
+                <i class="fas fa-code-branch"></i> Branch:
+                <select [ngModel]="selectedBranch && selectedBranch.id" (change)="navigateToBranch($event.target.value)" class="box" >
+                    <option *ngFor="let branch of selectedTeam.branches" [value]="branch.id">{{branch.title}}</option>
+                </select>
+            </label>
+
+            <label>
+                <i class="fas fa-sign"></i> Trend Type:
+                <select [(ngModel)]="selectedTrendType" (ngModelChange)="generateChartData()" class="box">
+                    <option [value]="'pass-rate'">Pass rate</option>
+                    <option [value]="'total-tests'">Number of tests</option>
+                </select>
+            </label>
+        </div>
+    </div>
+
+    <div *ngIf="hasChartData" class="chart-data">
+        <canvas baseChart
+                [datasets]="lineChartData"
+                [labels]="lineChartLabels"
+                [options]="lineChartOptions"
+                [colors]="lineChartColors"
+                [legend]="lineChartLegend"
+                [chartType]="lineChartType"
+                [plugins]="lineChartPlugins"></canvas>
+    </div>
+
+</div>

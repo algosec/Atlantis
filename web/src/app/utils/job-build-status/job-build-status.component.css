@@ -1,0 +1,17 @@
+.holder {
+    display: flex;
+}
+
+.holder .cell {
+    width: 55px;
+    max-width: 55px;
+}
+
+.holder .percentage {
+    width: 60px;
+    max-width: 60px;
+}
+
+.gray {
+    color: #cbcbcb;
+}

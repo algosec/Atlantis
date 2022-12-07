@@ -1,0 +1,51 @@
+{"entities_to_insert":[
+    {
+      "key": "allowToUseReviewedBypass",
+      "tenantId": "",
+      "value": [""]
+    },
+    {"key": "featureBranches",
+      "tenantId": "",
+      "value": {
+        "url": "",
+        "pass": "", "user": ""
+      }
+    },
+    {
+      "key": "jenkins",
+      "tenantId": "",
+      "value": {
+        "baseUrl": ""
+      }
+      },
+    {
+      "key": "jira",
+      "tenantId": "",
+      "value": {
+        "jql": "",
+        "fields": {
+          "failingAutomationField": "",
+          "failingTestCaseNameField": ""
+        },
+        "baseUrl": "",
+        "maxBulk": 0,
+        "credentials": {
+          "password": "",
+          "username": ""},
+          "neededFields": [
+            ""
+          ]
+      }
+    },
+    {
+      "key": "sso",
+      "tenantId": "",
+      "value": {
+        "cert": "", "type": "", "issuer": "",
+        "entryPoint": "",
+        "userAttribute": "",
+        "displayNameAttribute": ""
+      }
+    }
+ ]
+}

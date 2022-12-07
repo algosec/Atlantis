@@ -1,0 +1,175 @@
+body {
+  margin: 0;
+  color: #58595B;
+  height: 100%;
+  width: 100%;
+  background-color: white;
+}
+
+* {
+  font-family: 'Source Sans Pro', sans-serif;
+}
+
+.overflow-ellipsis {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+a {
+  color: #44ade2;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+a.pointer {
+  cursor: pointer;
+}
+
+table {
+  border-collapse:collapse;
+}
+
+.lucida-font {
+  font-family: 'Lucida Console';
+  font-size: 0.9em;
+}
+
+.section:after {
+  content:' ';
+  display:block;
+  border: 0.5px solid #58595b30;
+}
+
+.button {
+  font-size: 13px;
+  color: #58585b;
+  background-color: #fcfcfc;
+  border: 1px solid #e6e7e8;
+  border-radius: 3px;
+  padding: 5px 14px;
+  margin-right: 10px;
+  display: inline-block;
+  text-decoration: none;
+  cursor: pointer;
+  user-select: none;
+}
+
+.button:hover, .button.selected {
+  background-color: #f1f1f1;
+  text-decoration: none;
+}
+
+.input-text {
+  font-size: 13px;
+  color: #58585b;
+  border: 1px solid #e6e7e8;
+  border-radius: 3px;
+  padding: 5px 10px;
+  margin-right: 10px;
+}
+
+label.input-checkbox {
+  font-size: 13px;
+  font-weight: normal;
+  color: #58585b;
+  border: 1px solid #e6e7e8;
+  border-radius: 3px;
+  padding: 5px 10px;
+  display: inline-flex;
+}
+label.input-checkbox input[type=checkbox] {
+  margin: 2px 5px 0 0;
+}
+
+img.teams {
+  width: 26px;
+  margin-top: -5px;
+  margin-bottom: -9px;
+  margin-left: -3px;
+}
+
+img.issue-icon {
+  margin-bottom: -3px;
+  margin-right: 5px;
+}
+
+img.allure {
+  width: 20px;
+  margin-bottom: -4px;
+}
+
+.pending-review {
+  color: blueviolet;
+  border-color: blueviolet;
+}
+
+.same-status {
+  color: #58595B;
+  border-color: #58595B;
+}
+
+.reviewed {
+  color: #58595B;
+  border-color: #58595B;
+}
+
+.pass {
+  color: forestgreen;
+  border-color: forestgreen;
+}
+
+.fail {
+  color: red;
+  border-color: red;
+}
+
+.skip {
+  color: darkorange;
+  border-color: darkorange;
+}
+
+.favorite {
+  color: #FDCC0D;
+  border-color: #FDCC0D;
+}
+
+table.full {
+  width: 100%;
+}
+
+th {
+  text-align: left;
+}
+
+th, td {
+  padding: 4px 10px;
+}
+
+th:last-child, td:last-child {
+  padding-right: 0;
+}
+
+th:first-child, td:first-child {
+  padding-left: 0;
+}
+
+table.hover-row tr:not(:first-child):not(.no-hover):not(.selected):hover {
+  background-color: #40AFE220;
+}
+
+table.expand-last-row td:not(:last-child), table.expand-last-row th:not(:last-child) {
+  white-space: nowrap;
+}
+table.expand-last-row td:last-child, table.expand-last-row th:last-child {
+  width: 100%;
+}
+
+@media print {
+  .hidden-print {
+    display: none !important;
+  }
+}

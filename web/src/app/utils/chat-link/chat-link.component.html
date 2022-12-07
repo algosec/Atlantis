@@ -1,0 +1,5 @@
+<a *ngIf="email && email.includes('@'); else NotEmail" href="https://teams.microsoft.com/l/chat/0/0?users={{email}}" target="_blank" title="Click to start a chat">
+    <i class="fas fa-comments"></i>
+    {{email | emailToDisplayName}}
+</a>
+<ng-template #NotEmail>{{email}}</ng-template>

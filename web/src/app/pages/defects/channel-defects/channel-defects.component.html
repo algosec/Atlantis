@@ -1,0 +1,70 @@
+<p *ngIf="teams.length === 0">
+    No teams found
+</p>
+
+<div *ngIf="selectedVersion">
+    <div class="section">
+        <div class="main-selection">
+            <label>
+                Version:
+                <select class="box" [ngModel]="selectedVersion.version" (change)="changeVersion($event.target.value)">
+                    <option *ngFor="let team of teams" [value]="team.version">{{team.version}}</option>
+                </select>
+            </label>
+
+            <label>
+                Product:
+                <select class="box" [(ngModel)]="selectedBucket" (ngModelChange)="afterSearchUpdate()">
+                    <option value="All">All</option>
+                    <option disabled>----------------</option>
+                    <option *ngFor="let bucket of availableBuckets" [value]="bucket.title">{{bucket.title}}</option>
+                </select>
+            </label>
+
+            <search-bar class="filter-row search" [(search)]="searchText" (searchChange)="afterSearchUpdate()" (resetChange)="resetSearch()" [totalResults]="defects.length" [filteredResults]="filteredTotal" [isLoading]="isLoading"></search-bar>
+        </div>
+    </div>
+
+    <div *ngIf="defects">
+        <p><img issueIcon="Bug" class="issue-icon"> <b>{{productBugs}}</b> ASMS bugs , <img issueIcon="AutoBug" class="issue-icon"> <b>{{autoBugs}}</b> AutoBugs</p>
+        <div *ngIf="defects.length > 0 ; else NoDefects;">
+            <table matSort (matSortChange)="sortData($event)" *ngIf="defects.length > 0" class="full hover-row">
+                <tr>
+                    <th mat-sort-header="defect" class="th-sm">Defect</th>
+                    <th mat-sort-header="severity" class="th-sm">Severity</th>
+                    <th mat-sort-header="created" class="th-sm">Created</th>
+                    <th mat-sort-header="lastUpdated" class="th-sm">Last Updated</th>
+                    <th mat-sort-header="assignee" class="th-sm">Assignee</th>
+                    <th mat-sort-header="summary" class="th-md">Summary</th>
+                    <th mat-sort-header="channels" class="th-sm">Affected Jobs</th>
+                    <th class="th-md">Channels</th>
+                </tr>
+                <tr *ngFor="let defect of defects | channelDefects:selectedBucket:searchText">
+                    <td><defect-link [defect]="defect"></defect-link></td>
+                    <td>{{defect.severity}}</td>
+                    <td [title]="dateTimeService.getTimeFull(defect.created)">{{dateTimeService.getTimeDiff(defect.created)}}</td>
+                    <td [title]="dateTimeService.getTimeFull(defect.lastUpdate)" [ngClass]="dateTimeService.getDefectLastActivityColorClass(defect)">{{dateTimeService.getTimeDiff(defect.lastUpdate)}}</td>
+                    <td><chat-link [email]="defect.assignee"></chat-link></td>
+                    <td>{{defect.summary}}</td>
+                    <td>{{defect.channels.length}}</td>
+                    <td>
+                        <span *ngFor="let channel of defect.channels" class="channel-separator">
+                            <a href="{{channel.webUrl}}" target="_blank" title="Open channel in Teams">
+                                <img issueIcon="Teams" alt="" class="teams"/>
+                            </a>
+                            <a routerLink="channels/{{selectedVersion.version}}/../../all/{{channel.title}}">
+                               {{channel.title}}
+                            </a> <br>
+                        </span>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <ng-template #NoDefects>
+            <p>
+                There are no automation failing defects. Well done!!! (hint: check bugs in Atlantis :) )
+            </p>
+        </ng-template>
+    </div>
+
+</div>

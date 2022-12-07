@@ -1,0 +1,40 @@
+label {
+    width: 100%;
+    border: 2px solid #40afe2;
+    padding: 5px 10px;
+    height: 20px;
+    border-radius: 5px;
+    color: #40afe2;
+    display: flex;
+    user-select: none;
+}
+
+label .search-icon {
+    width: 20px;
+    vertical-align: middle;
+    text-align: center;
+}
+
+label .search-icon i {
+    transition: all 0.2s;
+}
+
+label:hover .search-icon>i.fa-search {
+    font-size: 1.2em;
+}
+
+label input {
+    margin-left: 5px;
+    outline: none;
+    border: 0;
+    flex-grow: 1;
+}
+
+label .clear-button {
+    margin-right: 10px;
+    cursor: pointer;
+}
+
+label .clear-button i:hover {
+    color: #3ea3d1;
+}

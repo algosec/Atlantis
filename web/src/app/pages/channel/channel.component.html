@@ -1,0 +1,77 @@
+<simple-header [titleText]="requestedChannel" [backUrl]="isAllBranches ? '../../configure' : '../'"></simple-header>
+
+<div *ngIf="channel">
+    <h2 class="section">General</h2>
+    <table>
+        <tr>
+            <th>Version:</th>
+            <td>{{channel.version}}</td>
+        </tr>
+        <tr>
+            <th>Owner:</th>
+            <td><chat-link [email]="channel.owner"></chat-link></td>
+        </tr>
+        <tr>
+            <th>Channel:</th>
+            <td>
+                <a *ngIf="channel.webUrl; else NoMsTeamsChannel" href="{{channel.webUrl}}" target="_blank" title="Open channel in Teams">
+                    <img issueIcon="Teams" alt="" class="teams">
+                    View Channel
+                </a>
+                <ng-template #NoMsTeamsChannel>
+                    <span class="fail">Not exists</span>
+                </ng-template>
+            </td>
+        </tr>
+        <tr>
+            <th>Jenkins job:</th>
+            <td>
+                <span *ngIf="channel.jenkinsJob; else NoJenkinsJob">
+                    <a [href]="channel.jenkinsJob" target="_blank">
+                        <i class="fab fa-jenkins"></i> Jenkins Job
+                    </a>
+                    <sup><i *ngIf="isStabilizationUrl(channel.jenkinsJob)" class="fas fa-wrench" title="stabilization job"></i></sup>
+                </span>
+                <ng-template #NoJenkinsJob>
+                    <span class="fail">Not exists</span>
+                </ng-template>
+            </td>
+        </tr>
+    </table>
+
+    <h2 class="section">Defects</h2>
+    <attach-defect [channelId]="channel.id" [alwaysOpen]="true" (success)="loadChannel()" class="margin-after"></attach-defect>
+    <defects-table [defects]="channel.defects | defectFilter:true"></defects-table>
+    <p class="title">Defect History
+        <a (click)="toggleDefectHistory()" class="margin-left icon-size">
+            <i class="fas fa-angle-double-down" title="Click to see defect history"></i>
+        </a>
+    </p>
+    <div *ngIf="showDefectHistory">
+    <defects-table [defects]="channel.defects | defectFilter:false"></defects-table>
+    </div>
+
+
+    <h2 class="section">History</h2>
+    <div *ngIf="selectedBranch || isAllBranches; else NoSuchBranch">
+        <p>
+            The following history is for
+            <span *ngIf="!isAllBranches; else AllBranches"><b><i class="fas fa-code-branch"></i> {{selectedBranch.title}}</b> branch</span>
+            <ng-template #AllBranches><b>all</b> branches</ng-template>
+        </p>
+        <table class="history hover-row">
+            <tr>
+                <th><i class="fas fa-code-branch"></i> Branch <label *ngIf="!isAllBranches && selectedBranch.title != 'master'" class="input-checkbox"><input type="checkbox" [(ngModel)]="isShowMasterBranch"> <span>Show <i class="fas fa-code-branch"></i> master</span></label></th>
+                <th><i class="far fa-sticky-note"></i> Summary</th>
+            </tr>
+            <tr *ngFor="let card of channel.cards | channelBranchFilter:selectedBranch:isShowMasterBranch">
+                <td>{{card.branch.title}}</td>
+                <td><card-summary [card]="card"></card-summary></td>
+            </tr>
+        </table>
+    </div>
+    <ng-template #NoSuchBranch>No such branch <b><i class="fas fa-code-branch"></i> {{requestedBranch}}</b></ng-template>
+
+</div>
+
+<div *ngIf="error">{{error}}</div>
