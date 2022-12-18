@@ -21,7 +21,7 @@ cat id_rsa.pub
 cd ..
 mkdir git
 cd git
-git clone git@github.com:algosec/atlantis.git
+git clone git@github.com:algosec/Atlantis.git
  ```
 ### Install docker-compose
  ```
@@ -147,7 +147,8 @@ The GUI will be available in browser at
 
 ### Initialize settings db by running
  ```
-python3 ./resources/InitialSettingsDB.py
+from resouces directory (cd git/Atlantis/resources/)
+python3 ./InitialSettingsDB.py
  ```
 
 ### For local login, insert users to db:
