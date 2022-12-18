@@ -1,8 +1,8 @@
-                    Atlantis Open Source License by Algosec
-                 Based on the GNU AFFERO GENERAL PUBLIC LICENSE
-                            Version 3, Preamble
+                                                    Atlantis Open Source License by Algosec
+                                                 Based on the GNU AFFERO GENERAL PUBLIC LICENSE
+                                                              Version 3, Preamble
 
-                       TERMS AND CONDITIONS
+TERMS AND CONDITIONS
 
   0. Definitions.
 
