@@ -16,8 +16,7 @@ Atlantis will help you manage your automation builds and will save you precious 
 All you need to do is follow the deployment instructions, and you're there 🔥
 
 Here's a little peek:
-![image](https://user-images.githubusercontent.com/83502821/189101901-4bb36c24-1549-4142-aa95-6f30e4c93027.png)
-
+[![atlantis2.png](https://i.postimg.cc/9MywCndw/atlantis2.png)](https://postimg.cc/wyTjkFb9)
 
 
 **General**
