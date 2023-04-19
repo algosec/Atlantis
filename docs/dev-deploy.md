@@ -39,9 +39,9 @@ sudo apt install curl
 curl -sL https://deb.nodesource.com/setup_14.x | sudo bash -
 sudo apt install -y nodejs
  ```
-### For npm, from git/atlantis directory 
+### For npm, from git/Atlantis directory 
  ```
-cd git/atlantis
+cd git/Atlantis
 npm install
  ```
 ### Install python3
@@ -50,7 +50,7 @@ cd ..
 cd ..
 sudo apt update
 sudo apt install python3-pip
-cd git/atlantis/resources
+cd git/Atlantis/resources
 sudo python3 -m pip install mysql-connector
 sudo pip install mysql-connector-python
  ```
