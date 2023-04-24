@@ -6,6 +6,7 @@ export interface ITeam {
     allowedAutomationBranches: string[];
     mode: string;
     defaultBranch: string;
+    buckets: IBucket[];
 }
 
 export interface IDefect {
@@ -191,4 +192,9 @@ export interface IChannelsOwners {
     id: string;
     title: string;
     owner: string;
+}
+export interface IBucket {
+    title: string;
+    prefix: string[]
+    suffix: string[]
 }

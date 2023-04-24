@@ -124,7 +124,7 @@
         <th><i class="fas fa-bug"></i> Defects <sup>last activity</sup></th>
       </tr>
 
-      <tr *ngFor="let channel of channels | channelFilter:favorites:search.text:search.bucket:search.passedOnly:search.failuresOnly:search.pendingOnly:search.reviewedOnly:search.sameStatusOnly:search.favoritesOnly; trackBy: trackByFn" class="channel">
+      <tr *ngFor="let channel of channels | channelFilter:favorites:search.text:search.bucket:search.passedOnly:search.failuresOnly:search.pendingOnly:search.reviewedOnly:search.sameStatusOnly:search.favoritesOnly:allBuckets; trackBy: trackByFn" class="channel">
         <td class="title overflow-ellipsis">
           <i class="favorite fa-star hidden-print" (click)="toggleFavorite(channel)" [ngClass]="favoriteClass(channel)" [title]="favoriteTooltip(channel)"></i>
           <a routerLink="./{{channel.title}}" title="Click to view history">

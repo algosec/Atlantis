@@ -1,18 +1,18 @@
 import {Pipe, PipeTransform} from '@angular/core';
-import {IChannelLatestSummary} from '../../../../../shared/src/model';
-import {BUCKETS, BUCKETS_BY_TITLE, IBucket, isBucketMatch} from "../../utils/buckets";
+import {IChannelLatestSummary, IBucket} from '../../../../../shared/src/model';
+import {isBucketMatch} from "../../utils/buckets";
 
 @Pipe({
   name: 'channelFilter'
 })
 export class ChannelFilterPipe implements PipeTransform {
 
-  transform(list: IChannelLatestSummary[], favorites: Set<string>, search: string, bucket: string, passedOnly: boolean, failuresOnly: boolean, pendingOnly: boolean, reviewedOnly: boolean, sameStatusOnly: boolean, favoritesOnly: boolean): IChannelLatestSummary[] {
+  transform(list: IChannelLatestSummary[], favorites: Set<string>, search: string, bucket: string, passedOnly: boolean, failuresOnly: boolean, pendingOnly: boolean, reviewedOnly: boolean, sameStatusOnly: boolean, favoritesOnly: boolean, allBuckets: IBucket[]): IChannelLatestSummary[] {
     if (search) {
       list = this.transformSearch(list, search);
     }
     if (bucket !== 'All') {
-      list = list.filter((channel: IChannelLatestSummary) => this.isBucketMatch(bucket, channel));
+      list = list.filter((channel: IChannelLatestSummary) => this.isBucketMatch(allBuckets, bucket, channel));
     }
     if (passedOnly) {
       list = list.filter((channel: IChannelLatestSummary) => channel.latestCard.failed === 0);
@@ -35,11 +35,13 @@ export class ChannelFilterPipe implements PipeTransform {
     return list;
   }
 
-  private isBucketMatch(bucket: string, channel: IChannelLatestSummary) {
+  private isBucketMatch (allBuckets: IBucket[], bucket: string, channel: IChannelLatestSummary) {
+    let BUCKETS_BY_TITLE: {[key: string]: IBucket};
     if (bucket !== 'Others') {
+      BUCKETS_BY_TITLE = allBuckets.reduce((obj, bucket: IBucket) => { obj[bucket.title] = bucket; return obj; }, {});
       return isBucketMatch(BUCKETS_BY_TITLE[bucket], channel.title)
     } else {
-      return BUCKETS.every((b: IBucket) => !isBucketMatch(b, channel.title))
+      return allBuckets.every((b: IBucket) => !isBucketMatch(b, channel.title))
     }
   }
 

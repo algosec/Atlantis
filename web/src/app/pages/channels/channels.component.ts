@@ -8,11 +8,12 @@ import {
   IBranch,
   IChannelLatestSummary,
   IChannelsPageSearch,
-  ITeam
+  ITeam,
+  IBucket
 } from "../../../../../shared/src/model";
 import {DateTimeService} from "../../utils/date-time.service";
 import {ChannelFilterPipe} from "./channel-filter.pipe";
-import {BUCKETS, calculateAvailableBuckets, IBucket, isBucketMatch} from "../../utils/buckets";
+import {calculateAvailableBuckets, isBucketMatch} from "../../utils/buckets";
 import {ChartDefinition, createSummaryChart, ResultsSummary} from "../../utils/result-chart";
 import {CardsUtilsService} from "../../utils/cards-utils.service";
 import {ClientStorageService} from "../../utils/client-storage.service";
@@ -30,6 +31,7 @@ export class ChannelsComponent implements OnInit, OnDestroy  {
   requestedBranch: string;
   selectedBranch: IBranch;
   availableBuckets: Set<string>;
+  allBuckets: IBucket[];
 
   channels: IChannelLatestSummary[] = [];
 
@@ -80,8 +82,11 @@ export class ChannelsComponent implements OnInit, OnDestroy  {
     if (this.teams.length == 0) {
       return;
     }
+    if(this.selectedTeam){
+      this.allBuckets = this.selectedTeam.buckets
+    }
 
-    if (!this.selectedTeam) {
+    else{
       const error = `No such team '${requestedVersion}' - navigating to the default team`;
       if (requestedVersion && requestedVersion !== 'latest') {
         this.appStateService.showWarningToast(error);
@@ -91,6 +96,7 @@ export class ChannelsComponent implements OnInit, OnDestroy  {
 
       // fallback to the default team
       this.navigateToVersion(this.teams[0].version);
+      this.allBuckets = this.teams[0].buckets
       return;
     }
 
@@ -119,9 +125,9 @@ export class ChannelsComponent implements OnInit, OnDestroy  {
     const allTitles = this.channels.map(x => x.title);
     this.availableBuckets = new Set();
 
-    calculateAvailableBuckets(allTitles).forEach(x => this.availableBuckets.add(x.title));
+    calculateAvailableBuckets(this.allBuckets, allTitles).forEach(x => this.availableBuckets.add(x.title));
 
-    if (allTitles.some((title: string) => BUCKETS.every((b: IBucket) => !isBucketMatch(b, title)))) {
+    if (allTitles.some((title: string) => this.allBuckets.every((b: IBucket) => !isBucketMatch(b, title)))) {
       this.availableBuckets.add('Others');
     }
 
@@ -175,7 +181,7 @@ export class ChannelsComponent implements OnInit, OnDestroy  {
   }
 
   calculateSearchTotals(): void {
-    this.filteredResults = this.channelFilterPipe.transform(this.channels, this.favorites, this.search.text, this.search.bucket, this.search.passedOnly, this.search.failuresOnly, this.search.pendingOnly, this.search.reviewedOnly, this.search.sameStatusOnly, this.search.favoritesOnly);
+    this.filteredResults = this.channelFilterPipe.transform(this.channels, this.favorites, this.search.text, this.search.bucket, this.search.passedOnly, this.search.failuresOnly, this.search.pendingOnly, this.search.reviewedOnly, this.search.sameStatusOnly, this.search.favoritesOnly, this.allBuckets);
   }
 
   private calculateCharts() {

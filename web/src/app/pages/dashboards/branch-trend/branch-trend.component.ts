@@ -1,12 +1,12 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {IBranch, IBuildTrendItem, ITeam} from "../../../../../../shared/src/model";
+import {IBranch, IBuildTrendItem, ITeam, IBucket} from "../../../../../../shared/src/model";
 import {randomColor} from "randomcolor";
 import {Subscription} from "rxjs";
 import {AppStateService} from "../../../app-state.service";
 import {Color, Label} from "ng2-charts";
 import {ChartDataSets, ChartOptions} from "chart.js";
 import {ActivatedRoute, ParamMap, Router} from "@angular/router";
-import {BUCKETS, calculateAvailableBuckets, IBucket, isBucketMatch} from "../../../utils/buckets";
+import {calculateAvailableBuckets, isBucketMatch} from "../../../utils/buckets";
 
 type TrendType = 'pass-rate' | 'total-tests';
 
@@ -105,6 +105,7 @@ export class BranchTrendComponent implements OnInit, OnDestroy {
 
   hasChartData: boolean;
   generalLine: LineData;
+  allBuckets: IBucket[];
   bucketLines: Map<string, LineData>;
   labels: string[];
 
@@ -156,6 +157,7 @@ export class BranchTrendComponent implements OnInit, OnDestroy {
     this.selectedTeam = this.teams.filter(v => v.version === version)[0];
     this.selectedBranch = this.selectedTeam.branches.find(x => x.title === branch) || this.selectedTeam.branches.find(x => x.title === this.teams[0].defaultBranch);
     this.navigateToBranch(this.selectedBranch.id.toString());
+    this.allBuckets = this.selectedTeam.buckets
   }
 
   navigateToBranch(branchId: string): void {
@@ -182,7 +184,7 @@ export class BranchTrendComponent implements OnInit, OnDestroy {
 
     const channels = Array.from(new Set<string>(res.map(x => x.title)));
     const builds = new Set<string>();
-    const bucketTitles = calculateAvailableBuckets(channels).map(x => x.title);
+    const bucketTitles = calculateAvailableBuckets(this.allBuckets, channels).map(x => x.title);
 
     // populate each bucket with initial line object
     bucketTitles.forEach(x => this.bucketLines.set(x, new LineData(x, randomColor({luminosity: 'light', alpha: 0.5}))));
@@ -190,7 +192,7 @@ export class BranchTrendComponent implements OnInit, OnDestroy {
     // re-map data
     res.forEach((buildTrendItem) => {
       // skip item that does not match to a bucket
-      const bucket: IBucket = BUCKETS.find((bucket: IBucket) => isBucketMatch(bucket, buildTrendItem.title));
+      const bucket: IBucket = this.allBuckets.find((bucket: IBucket) => isBucketMatch(bucket, buildTrendItem.title));
       if (!bucket) {
         return;
       }

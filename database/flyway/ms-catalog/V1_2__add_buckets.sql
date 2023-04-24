@@ -1,0 +1,1 @@
+ALTER TABLE `teams` ADD `buckets` json NOT NULL AFTER `version`;
