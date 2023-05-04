@@ -46,7 +46,8 @@ sudo pip install mysql-connector-python
  ```
 
 ### 9. Prepare the DB
-    * Run local database & redis `./cicd.sh --type dev-db --action deploy` (action ps to check status)
+    * Run local database & redis `sudo ./cicd.sh --type dev-db --action deploy` (action ps to check status)
+    (You might need to add execution permissions using `chmod +x cicd.sh`
     * Database GUI (adminer) - http://localhost:8080/?server=db&username=root  
       * user: **root**  
       * pass: **dev**
