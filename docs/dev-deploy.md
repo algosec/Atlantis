@@ -37,13 +37,19 @@ sudo pip install mysql-connector-python
  File name should be .env-dev-db.env and write to it DISABLE_CACHE=true
  ```
 ### 8. Create your own configuration files
-#### Templates are found under \git\atlantis\resources\templates. Create your own copies, fill your data, and replace with:
+#### Create your own copies, fill your data, and replace with:
 
- ```
-(1) ./shared/src/globalConfig.ts
 
-(2) ./resources/initializeSettingsDBEntetis.json
- ```
+[Atlantis/shared/src/globalConfig.ts](https://github.com/algosec/Atlantis/blob/82e470bedcca155af12f4e892cc7b56862754529/shared/src/globalConfig.ts)
+
+[Atlantis/resources/InitialSettingsDB.py](https://github.com/algosec/Atlantis/blob/4624545845a85dc56ad19b68f80af33c2babb493/resources/InitialSettingsDB.py)
+
+Templates and explanations are found here:
+
+[globalConfig_Template.ts](https://github.com/algosec/Atlantis/resources/templates/globalConfig_Template.ts)
+
+[initializaSettingsDBEnteties_Template.json](https://github.com/algosec/Atlantis/resources/templates/initializaSettingsDBEnteties_Template.json)
+
 
 ### 9. Prepare the DB
     * Run local database & redis `sudo ./cicd.sh --type dev-db --action deploy` (action ps to check status)
