@@ -34,7 +34,7 @@ sudo pip install mysql-connector-python
  ```
 ### 7. Create dev-env file in root
  ```
- File name should be .env-dev-db.env and write to it `DISABLE_CACHE=true
+ File name should be .env-dev-db.env and write to it DISABLE_CACHE=true
  ```
 ### 8. Create your own configuration files
 #### Templates are found under \git\atlantis\resources\templates. Create your own copies, fill your data, and replace with:
