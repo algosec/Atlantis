@@ -1,9 +1,9 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {AppStateService} from "../../../app-state.service";
-import {IDefectFailures, ITeam} from "../../../../../../shared/src/model";
+import {IDefectFailures, ITeam, IBucket} from "../../../../../../shared/src/model";
 import {Subscription} from "rxjs";
 import {DateTimeService} from "../../../utils/date-time.service";
-import {calculateAvailableBuckets, IBucket} from "../../../utils/buckets";
+import {calculateAvailableBuckets} from "../../../utils/buckets";
 import {ChannelDefectsPipe} from "./channel-defects.pipe";
 import {Sort} from '@angular/material/sort';
 import {ClientStorageService} from "../../../utils/client-storage.service";
@@ -23,6 +23,7 @@ export class ChannelDefectsComponent implements OnInit, OnDestroy {
     isLoading: boolean;
 
     teams: ITeam[] = [];
+    allBuckets: IBucket[];
     availableBuckets: IBucket[] = [];
     subscriptions: Subscription[] = [];
 
@@ -57,6 +58,7 @@ export class ChannelDefectsComponent implements OnInit, OnDestroy {
     onTeamsLoad(teams: ITeam[]): void {
         this.teams = teams;
         this.loadUserSavedState();
+        this.allBuckets = this.teams[0].buckets
     }
 
     changeVersion(version: string): void {
@@ -66,6 +68,7 @@ export class ChannelDefectsComponent implements OnInit, OnDestroy {
 
         const filteredArray = this.teams.filter(v => v.version === version);
         this.selectedVersion = (filteredArray.length === 0) ? null : filteredArray[0];
+        this.allBuckets = this.selectedVersion.buckets
         this.loadDefects();
     }
 
@@ -79,7 +82,7 @@ export class ChannelDefectsComponent implements OnInit, OnDestroy {
 
     onDefectsLoad(res : IDefectFailures[]): void {
         const allTitles = res.flatMap(x => x.channels).map(x => x.title);
-        this.availableBuckets = calculateAvailableBuckets(allTitles);
+        this.availableBuckets = calculateAvailableBuckets(this.allBuckets, allTitles);
         this.defects = res.sort((a,b) => b.channels.length - a.channels.length);
         this.afterSearchUpdate();
     }
@@ -97,7 +100,7 @@ export class ChannelDefectsComponent implements OnInit, OnDestroy {
     }
 
     calculateSearchTotals(): void {
-        const filteredResults: IDefectFailures[] = this.channelDefectsPipePipe.transform(this.defects, this.selectedBucket, this.searchText);
+        const filteredResults: IDefectFailures[] = this.channelDefectsPipePipe.transform(this.defects, this.selectedBucket, this.searchText, this.allBuckets);
         this.filteredTotal = filteredResults.length;
         this.productBugs = filteredResults.filter((obj) => obj.issueType === "Bug").length;
         this.autoBugs = filteredResults.filter((obj) => obj.issueType === "AutoBug").length;

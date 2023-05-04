@@ -39,7 +39,7 @@
                     <th mat-sort-header="channels" class="th-sm">Affected Jobs</th>
                     <th class="th-md">Channels</th>
                 </tr>
-                <tr *ngFor="let defect of defects | channelDefects:selectedBucket:searchText">
+                <tr *ngFor="let defect of defects | channelDefects:selectedBucket:searchText:allBuckets">
                     <td><defect-link [defect]="defect"></defect-link></td>
                     <td>{{defect.severity}}</td>
                     <td [title]="dateTimeService.getTimeFull(defect.created)">{{dateTimeService.getTimeDiff(defect.created)}}</td>

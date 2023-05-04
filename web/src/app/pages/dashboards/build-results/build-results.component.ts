@@ -5,9 +5,10 @@ import {
   IBuildsByBranchByTeam,
   IBuildCountByChannel,
   ICardBuildSummary,
-  ITeam
+  ITeam,
+  IBucket
 } from "../../../../../../shared/src/model";
-import {calculateAvailableBuckets, IBucket, isBucketMatch} from "../../../utils/buckets";
+import {calculateAvailableBuckets, isBucketMatch} from "../../../utils/buckets";
 import {Subscription} from "rxjs";
 import {CardsUtilsService} from "../../../utils/cards-utils.service";
 import {ActivatedRoute, ParamMap, Router} from "@angular/router";
@@ -27,7 +28,8 @@ import {
 export class BuildResultsComponent implements OnInit, OnDestroy {
 
   teams: ITeam[];
-
+  allBuckets: IBucket[];
+  version: string;
   buildsByBranchByTeams: IBuildsByBranchByTeam[];
   buildCountPerChannel: IBuildCountByChannel[];
 
@@ -72,6 +74,7 @@ export class BuildResultsComponent implements OnInit, OnDestroy {
 
   onTeamsLoad(teams: ITeam[]): void {
     this.teams = teams;
+    this.allBuckets = this.teams[0].buckets
     this.route.paramMap.subscribe(
         (params: ParamMap) => {
           this.branch = params.get('branch');
@@ -110,6 +113,8 @@ export class BuildResultsComponent implements OnInit, OnDestroy {
     this.updateRoute();
     this.loadBuildResults();
     this.cdr.detectChanges();
+    this.version = info.version;
+    this.allBuckets = this.teams.find(x => x.version === this.version).buckets;
   }
 
   updateBranch(): void {
@@ -167,7 +172,7 @@ export class BuildResultsComponent implements OnInit, OnDestroy {
   private calculateChartsData(cards: ICardBuildSummary[]) {
     const allTitles = cards.map(x => x.channelTitle);
 
-    this.availableBuckets = calculateAvailableBuckets(allTitles);
+    this.availableBuckets = calculateAvailableBuckets(this.allBuckets, allTitles);
     this.generalResult = new ResultsSummary();
     this.results = new Map<string, ResultsSummary>();
     this.failuresAmountCharts = new Map<string, ChartDefinition>();
