@@ -44,17 +44,17 @@ In order to inform the relevant team members about your final CI results, we hav
 # Deployment
 
 ### Dev deploy
-Available under  [docs/dev-deploy.md](https://github.com/algosec/atlantis/blob/main/docs/dev-deploy.md)
+Available under  [docs/dev-deploy.md](https://github.com/algosec/Atlantis/blob/main/docs/dev-deploy.md)
 
 ### Staged & Production Deploy
-  Available under [docs/staged & prod -deploy.md](https://github.com/algosec/atlantis/blob/main/docs/staged%20%26%20prod%20-deploy.md)
+  Available under [docs/staged & prod -deploy.md](https://github.com/algosec/Atlantis/blob/main/docs/staged%20%26%20prod%20-deploy.md)
   
   
 # About automated external processes 
- Available under [docs/email and teams integrations.md](https://github.com/algosec/atlantis/blob/main/docs/email%20and%20teams%20integrations.md)
+ Available under [docs/email and teams integrations.md](https://github.com/algosec/Atlantis/blob/main/docs/email%20and%20teams%20integrations.md)
 
   
 # Get Data
-  Explained under [docs/get-data.md ](https://github.com/algosec/atlantis/blob/main/docs/get-data.md)
+  Explained under [docs/get-data.md ](https://github.com/algosec/Atlantis/blob/main/docs/get-data.md)
   
 
