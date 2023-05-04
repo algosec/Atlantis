@@ -74,7 +74,7 @@ export class BuildResultsComponent implements OnInit, OnDestroy {
 
   onTeamsLoad(teams: ITeam[]): void {
     this.teams = teams;
-    his.allBuckets = this.teams[0].buckets
+    this.allBuckets = this.teams[0].buckets
     this.route.paramMap.subscribe(
         (params: ParamMap) => {
           this.branch = params.get('branch');
