@@ -89,4 +89,4 @@ For example, the password 123456789 should enter as FeKw08M4keuw8e9gnsQZQgwg4yDO
 SSO login will be initiated using the sso credentials and details you give to entity with key = "sso", in ./resources/initializeSettingsDBEntetis.json
 ```
 
-## You're all set! next step is to import some data and get the flow going
+## You're all set! The next step is to import some data and get the flow going
